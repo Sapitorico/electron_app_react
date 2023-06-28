@@ -10,3 +10,43 @@
 @tailwind components;
 @tailwind utilities;
 
+.containerr {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.bubbles {
+  position: relative;
+  display: flex;
+}
+.bubbles span {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background: #72faab;
+  margin: 0 20px;
+  padding: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 4px #4c5196,
+  0 0 25px #b6fff3,
+  0 0 50px #b6fff3;
+  animation: animate 15s linear infinite;
+  animation-duration: calc(150s / var(--i));
+}
+.bubbles span:nth-child(even) {
+  background: #f37df7;
+  box-shadow: 0 0 10px 4px #784c96,
+  0 0 25px #f0b6ff,
+  0 0 50px #f0b6ff;
+}
+@keyframes animate {
+  0%
+  {
+      transform: translateY(100vh) scale(0);
+  }
+  100%
+  {
+      transform: translateY(-10vh) scale(1);
+  }
+}
