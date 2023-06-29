@@ -66,7 +66,7 @@ export default function Glossary() {
           {alphabet_arr.map((letter, index) => (
             <div className="card" key={index}>
               <button
-                className="card card-body w-5 glass min-w-[5rem] justify-center text-center text-2xl"
+                className="card card-body glass shadow-xl text-4xl font-semibold"
                 onClick={() =>
                   document.getElementById(`my_modal_${index}`).showModal()
                 }
@@ -75,8 +75,9 @@ export default function Glossary() {
               </button>
               <dialog id={`my_modal_${index}`} className="modal">
                 <form method="dialog" className="modal-box">
-                  <h3 className="font-bold text-lg">{letter}</h3>
-                  <img src={letter_gifList[letter]} alt="my-gif" />
+                  <div className="grid-cols-4">
+                  <img src={letter_gifList[letter]} alt="my-gif" className="mx-auto rounded-lg col-span-2" />
+                  </div>
                   <div className="modal-action">
                     <button className="btn">Close</button>
                   </div>
@@ -90,7 +91,7 @@ export default function Glossary() {
           {number_arr.map((number, index) => (
             <div className="card" key={index}>
               <button
-                className="card card-body w-5 glass min-w-[5rem] justify-center text-center text-2xl"
+                className="card card-body glass shadow-xl text-4xl font-semibold"
                 onClick={() =>
                   document.getElementById(`my_modal_${index}`).showModal()
                 }
