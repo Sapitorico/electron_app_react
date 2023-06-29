@@ -51,3 +51,49 @@
     transform: rotateY(15deg); /* Rotación de 10 grados hacia la derecha */
   }
 }
+
+.bubbles {
+  position: relative;
+  z-index: 0;
+}
+
+.bubbles span {
+  width: 6px;
+  height: 6px;
+  background: #1de9b6;
+  margin: 0 60px;
+  padding: 3px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 4px #4c5196,
+  0 0 25px #b6fff3,
+  0 0 50px #b6fff3;
+  animation: animate-bubble 17s linear infinite;
+  animation-duration: calc(180s / var(--i));
+}
+.bubbles span:nth-child(even) {
+  background: #dd3064;
+  box-shadow: 0 0 10px 1px #f53082,
+  0 0 25px #f0b6ff,
+  0 0 50px #f0b6ff;
+}
+
+.bubbles span.otherBubbles {
+  background: #e9c41d;
+  box-shadow: 0 0 9px 5px #784c96,
+  0 0 25px #e6dc54,
+  0 0 50px #e6dc54;
+}
+
+@keyframes animate-bubble {
+  0% {
+    transform: translateY(100vh) scale(0);
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+  }
+}
+
+.mainContainer {
+  position: relative;
+  z-index: 1;
+}
