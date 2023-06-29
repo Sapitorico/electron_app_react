@@ -14,20 +14,15 @@
   font-size: 7rem;
 }
 
-.card {
-  width: 8rem;
-  height: 8rem;
+.glosaryCard {
+  width: 6rem;
+  height: 6rem;
+  justify-content: center;
+  align-items: center;
 }
 
-.card:hover {
+.glosaryCard:hover {
   color: rgb(39 39 42);
   background-color: #0cffc269;
   transition: 0.6s;
-}
-
-.card-body {
-  width: 8rem;
-  height: 8rem;
-  justify-content: center;
-  align-items: center;
 }

@@ -66,7 +66,7 @@ export default function Glossary() {
           {alphabet_arr.map((letter, index) => (
             <div className="card" key={index}>
               <button
-                className="card card-body glass shadow-xl text-4xl font-semibold"
+                className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
                 onClick={() =>
                   document.getElementById(`my_modal_${index}`).showModal()
                 }
@@ -89,9 +89,9 @@ export default function Glossary() {
         <h1 className="m-5 text-2xl font-bold">Numeros</h1>
         <div className="flex flex-wrap gap-5 m-5">
           {number_arr.map((number, index) => (
-            <div className="card" key={index}>
+            <div className="glosaryCardBody card" key={index}>
               <button
-                className="card card-body glass shadow-xl text-4xl font-semibold"
+                className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
                 onClick={() =>
                   document.getElementById(`my_modal_${index}`).showModal()
                 }
