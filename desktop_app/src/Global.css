@@ -10,6 +10,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.homeTitle{
+  font-size: 6rem;
+  color: #1de9b6;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.801);
+}
+
 .glosariLetters {
   font-size: 7rem;
 }
@@ -25,4 +31,23 @@
   color: rgb(39 39 42);
   background-color: #0cffc269;
   transition: 0.6s;
+}
+
+.animate-spin {
+  animation-name: spin;
+  animation-duration: 4.6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateY(15deg); /* Rotación de 10 grados hacia la derecha */
+  }
+  50% {
+    transform: rotateY(-20deg); /* Rotación de -10 grados hacia la izquierda */
+  }
+  100% {
+    transform: rotateY(15deg); /* Rotación de 10 grados hacia la derecha */
+  }
 }
