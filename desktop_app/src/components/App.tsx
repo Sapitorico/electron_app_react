@@ -6,7 +6,7 @@ import Practice from "./Dashboard/Tabs/Practice/Practice";
 import { useState } from "react";
 import Glosario from "./Dashboard/Tabs/Glosario/Glosario";
 import Clases from "./Dashboard/Tabs/Clases/Clases";
-
+import Bubbles from "./bubbleAnimation";
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
 
@@ -18,14 +18,17 @@ function App() {
     <div className="flex w-full h-screen bg-base-100 ">
       <Dashboard selectedTab={selectedTab} handleSelectTab={handleSelectTab} />
 
-      <div className="flex-1">
-        {selectedTab === "home" && <HomePage />}
-        {selectedTab === "educacion" && (
-          <Education handleSelectTab={handleSelectTab} />
-        )}
-        {selectedTab === "clases" && <Clases />}
-        {selectedTab === "practica" && <Practice />}
-        {selectedTab === "glosario" && <Glosario />}
+      <div className="container h-full overflow-hidden">
+        <Bubbles />
+        <div className='mainContainer  justify-center items-center h-full'>
+          {selectedTab === "home" && <HomePage />}
+          {selectedTab === "educacion" && (
+            <Education handleSelectTab={handleSelectTab} />
+          )}
+          {selectedTab === "clases" && <Clases />}
+          {selectedTab === "practica" && <Practice />}
+          {selectedTab === "glosario" && <Glosario />}
+        </div>
       </div>
     </div>
   );
