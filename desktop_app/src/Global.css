@@ -98,3 +98,29 @@
   position: relative;
   z-index: 1;
 }
+
+.dashTags {
+  border-radius: 0.4rem;
+  animation-name: color-transition;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+
+.tabs {
+  position: relative;
+}
+
+.tab-indicator {
+  border-radius: 0.4rem;
+  position: absolute;
+  width: 97.5%;
+  height: 3.5rem; /* Ajusta el grosor del indicador según tus necesidades */
+  background-color: #1de9b6; /* Color del indicador */
+  z-index: -1;
+}
+
+.animate-color-transition {
+  transition: background-color 0.3s ease;
+  color: rgb(39 39 42);
+}
