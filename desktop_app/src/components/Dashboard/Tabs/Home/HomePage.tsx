@@ -1,6 +1,6 @@
 export default function HomePage() {
     return (
-        <div class="container w-screen h-screen overflow-hidden">
+        <div class="container h-full overflow-hidden">
             <div className="bubbles flex">
                 <span class="relative rounded-full shadow-2xl animate-bubble" style={{ '--i': 11 }}></span>
                 <span class="relative rounded-full shadow-2xl animate-bubble" style={{ '--i': 13 }}></span>

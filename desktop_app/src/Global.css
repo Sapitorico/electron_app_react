@@ -29,8 +29,9 @@
 
 .glosaryCard:hover {
   color: rgb(39 39 42);
-  background-color: #0cffc269;
-  transition: 0.6s;
+  background-color: #0cffc286;
+  box-shadow: 0px 0px 10px 0px #7bf7d848;
+  transition: 0.4s;
 }
 
 .animate-spin {
