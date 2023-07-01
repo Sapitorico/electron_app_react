@@ -21,7 +21,7 @@ export default function Dashboard({
     setAnimationStyle({ top: activeTabTop });
   }, [activeIndex]);
 
-  const handleSelectTabWithAnimation = (tab: string, index: number) => {
+  const handleSelectTabWithAnimation = (tab: selectedTabType, index: number) => {
     setActiveIndex(index);
     handleSelectTab(tab);
   };
