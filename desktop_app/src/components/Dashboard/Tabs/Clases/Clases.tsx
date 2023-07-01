@@ -1,81 +1,89 @@
 import React, { useRef, useState } from "react";
 import gifImage from "src/data/gifts/frog-sitting.gif"; // Reemplaza la ruta con la ubicación de tu archivo GIF
+import { selectedTabType } from "@/types/dataTypes";
+import ImgDisplay from "./ImgComp";
+import sendImages from "@/components/websocket/socket";
 
-export default function Practice() {
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
+export default function Practice({handleSelectTab}:{handleSelectTab: (value: selectedTabType) => void;}) {
+  
   const [isCameraOpen, setCameraOpen] = useState(false);
 
-  const openWebcam = async () => {
-    if (isCameraOpen) {
-      closeWebcam();
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
-      videoRef.current.style.transform = "scaleX(-1)";
-      streamRef.current = stream;
-      setCameraOpen(true);
-    } catch (error) {
-      console.error("Error accessing webcam:", error);
-    }
-  };
+  function openWebcam() {
+    setCameraOpen(true)
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play();
+        video.style.transform = 'scaleX(-1)'
+        obtainfps(video)
+      })
+      .catch((error) => {
+        console.log('Error accessing webcam: ' + error.toString());
+      });
+};
+let intervalId;
 
-  const closeWebcam = () => {
-    if (streamRef.current) {
-      const tracks = streamRef.current.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-      videoRef.current.style.transform = "";
-      streamRef.current = null;
-      setCameraOpen(false);
-    }
-  };
+function obtainfps(video) {
+  intervalId = setInterval(() => {
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d')
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = canvas.toDataURL('image/jpeg');
+    sendImages(imageData)
+  }, 200);
+}
+
+function closeWebcam() {
+  
+  video.pause();
+  video.srcObject.getTracks().forEach((track) => {
+    track.stop();});
+  video.srcObject = null;
+  clearInterval(intervalId)
+  setCameraOpen(false)
+  //location.reload()
+}
 
   return (
-    <div className="flex m-5">
-      <div className="w-full">
-        <div className="">
-          <div className="flex">
-            <div className="flex card bg-base-300 place-items-center justify-center overflow-hidden">
-              <img
-                src={gifImage}
-                alt="GIF"
-                style={{ width: "100%", height: "10%" }}
-              />
-            </div>
-            <div className="divider divider-horizontal"></div>
-            <div className="grid flex-grow bg-base-200 justify-center rounded-box overflow-hidden artboard phone-1">
-              <video
-                ref={videoRef}
-                autoPlay
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  transform: "scaleX(-1)",
-                }}
-              ></video>
-              {isCameraOpen ? (
-                <button className="btn btn-primary" onClick={closeWebcam}>
-                  Cerrar Webcam
-                </button>
-              ) : (
-                <button className="btn btn-primary" onClick={openWebcam}>
-                  Abrir Webcam
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="divider"></div>
-          <div className="w-full">
-            <ul className="w-full steps lg:steps-horizontal">
-              <li className="step step-primary">clases</li>
-              <li className="step step-primary">practica</li>
-              <li className="step">quiz</li>
-            </ul>
-          </div>
+    <div className="mainContainer flex flex-col h-screen w-screen">
+      <div className="flex flex-grow justify-center items-center">
+        <ImgDisplay gifImage={gifImage} />
+        <div className="divider divider-horizontal w-px h-full"></div>
+        <div className="grid   bg-base-200 justify-center rounded-box overflow-hidden  h-96 w-10/12 p-4 ">
+          <video
+            id="video"
+            autoPlay
+            style={{
+            
+            }}
+          ></video>
+          <canvas id="canvas" width="640" height="480" className="hidden"></canvas>
+          {isCameraOpen ? (
+            <button className="btn btn-primary" onClick={closeWebcam}>
+              Cerrar Webcam
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={openWebcam}>
+              Abrir Webcam
+            </button>
+          )}
         </div>
       </div>
+      
+      <div className="divider"></div>
+      <button className="btn btn-primary" onClick={() => {handleSelectTab("educacion")}} >Volver</button>
+      <div className="w-full flex m-4">
+      <ul className="steps w-screen">
+      <li className="step step-primary">clases</li>
+      <li className="step step-primary">practica</li>
+      <li className="step">quiz</li>
+      </ul>
+      
+      </div>
+
     </div>
   );
+  
+  
 }

@@ -78,7 +78,7 @@ export default function Dashboard({
       <div className="flex flex-col p-4 border-primary border-[1.5px] m-4 items-center gap-4 rounded-box">
         <span>Mano dominante</span>
         <div className="btn-group">
-          <button
+          <button name="hand"
             className={`btn ${dominantHand === "izquierda" ? "btn-active" : ""
               }`}
             onClick={() => {
@@ -87,7 +87,7 @@ export default function Dashboard({
           >
             Izquierda
           </button>
-          <button
+          <button name="hand"
             className={`btn ${dominantHand === "derecha" ? "btn-active" : ""}`}
             onClick={() => {
               setDominantHand("derecha");

@@ -7,6 +7,7 @@ import { useState } from "react";
 import Glosario from "./Dashboard/Tabs/Glosario/Glosario";
 import Clases from "./Dashboard/Tabs/Clases/Clases";
 import Bubbles from "./bubbleAnimation";
+import Xd from "./Dashboard/Tabs/Clases/ImgComp";
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
 
@@ -25,7 +26,7 @@ function App() {
           {selectedTab === "educacion" && (
             <Education handleSelectTab={handleSelectTab} />
           )}
-          {selectedTab === "clases" && <Clases />}
+          {selectedTab === "clases" && (<Clases handleSelectTab={handleSelectTab} />)}
           {selectedTab === "practica" && <Practice />}
           {selectedTab === "glosario" && <Glosario />}
         </div>
