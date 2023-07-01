@@ -10,6 +10,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.container {
+  width: 100%;
+  margin-left: 3%;
+}
+
 .homeTitle{
   font-size: 6rem;
   color: #1de9b6;
@@ -54,7 +59,7 @@
 }
 
 .bubbles {
-  position: fixed;
+  position: relative;
   z-index: 0;
 }
 
@@ -142,12 +147,37 @@
 }
 
 .btn-warning:hover {
-  padding-right: 138px;
-  padding-left: 138px;
+  padding-right: 129px;
+  padding-left: 129px;
   background-color: #f85656;
   transition: 0.3s ease-in-out;
 }
 
 .btn-warning:hover::after {
   opacity: 1;
+}
+
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #010101; /* Color de fondo personalizado */
+  border: none; /* Elimina el borde predeterminado */
+  padding: 20px;
+  width: 400px; /* Ajusta el ancho según tus necesidades */
+  max-width: 90%; /* Limita el ancho máximo si es necesario */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.098); /* Agrega sombra si lo deseas */
+}
+
+.custom-modal > * {
+  margin-bottom: 10px; /* Agrega espacio entre elementos internos del diálogo */
+}
+
+.backgroundModal {
+  background-color: #080b0ee8;
+}
+
+.backgroundModal > form {
+  box-shadow: 0px 0px 28px 4px #e9423c;
 }
