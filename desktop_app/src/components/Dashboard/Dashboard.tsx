@@ -32,17 +32,19 @@ export default function Dashboard({
         <ul className="tabs tabs-boxed flex-col items-stretch drop-shadow-lg">
           <li
             onClick={() => handleSelectTabWithAnimation('home', 0)}
-            className={`stat ${selectedTab === 'home' ? 'dashTags' : ''}`}
+            className={`stat ${selectedTab === 'home' ? 'dashTags flex items-center' : 'flex items-center'}`}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" className="w-6 h-6 stroke-white animate-color-transition">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
             <a href="#" className={activeIndex === 0 ? 'animate-color-transition text-xl font-semibold' : 'text-xl font-semibold'}>
               Home
             </a>
           </li>
           <li
             onClick={() => handleSelectTabWithAnimation('educacion', 1)}
-            className={`stat ${
-              selectedTab === 'educacion' || selectedTab === 'clases' ? 'dashTags text-xl font-semibold' : 'text-xl font-semibold'
-            }`}
+            className={`stat ${selectedTab === 'educacion' || selectedTab === 'clases' ? 'dashTags text-xl font-semibold' : 'text-xl font-semibold'
+              }`}
           >
             <a href="#" className={activeIndex === 1 ? 'animate-color-transition text-xl font-semibold' : 'text-xl font-semibold'}>
               Educación

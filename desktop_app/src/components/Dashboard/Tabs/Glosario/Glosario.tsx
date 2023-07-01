@@ -76,10 +76,10 @@ export default function Glossary() {
               <dialog id={`my_modal_${index}`} className="modal">
                 <form method="dialog" className="modal-box">
                   <div className="grid-cols-4">
-                  <img src={letter_gifList[letter]} alt="my-gif" className="mx-auto rounded-lg col-span-2" />
+                  <img src={letter_gifList[letter]} alt="my-gif" className="mx-auto rounded-lg col-span-2 max-w-xs" />
                   </div>
                   <div className="modal-action">
-                    <button className="btn">Close</button>
+                    <button className="btn btn-warning mx-auto text-base">Cerrar</button>
                   </div>
                 </form>
               </dialog>
@@ -101,9 +101,9 @@ export default function Glossary() {
               <dialog id={`my_modal_${index}`} className="modal">
                 <form method="dialog" className="modal-box">
                   <h3 className="font-bold text-lg">{number}</h3>
-                  <img src={number_gifList[number]} alt="my-gif" />
+                  <img src={number_gifList[number]} alt="my-gif" className="mx-auto rounded-lg col-span-2 max-w-xs" />
                   <div className="modal-action">
-                    <button className="btn">Close</button>
+                    <button className="btn btn-warning mx-auto text-base">Cerrar</button>
                   </div>
                 </form>
               </dialog>
