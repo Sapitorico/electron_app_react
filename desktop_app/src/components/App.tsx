@@ -7,26 +7,35 @@ import { useState } from "react";
 import Glosario from "./Dashboard/Tabs/Glosario/Glosario";
 import Clases from "./Dashboard/Tabs/Clases/Clases";
 import Bubbles from "./bubbleAnimation";
-import Xd from "./Dashboard/Tabs/Clases/ImgComp";
+import { dominantHandType } from "@/types/dataTypes";
+
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
-
   const handleSelectTab = (value: selectedTabType) => {
     setSelectedTab(value);
   };
 
+  const [dominantHand, setDominantHand] = useState<dominantHandType>("derecha");
+
   return (
     <div className="flex w-full h-screen bg-base-100 ">
-      <Dashboard selectedTab={selectedTab} handleSelectTab={handleSelectTab} />
+      <Dashboard
+        selectedTab={selectedTab}
+        handleSelectTab={handleSelectTab}
+        dominantHand={dominantHand}
+        setDominantHand={setDominantHand}
+      />
 
       <div className="container h-full overflow-hidden">
         <Bubbles />
-        <div className='mainContainer  justify-center items-center h-full'>
+        <div className="mainContainer  justify-center items-center h-full">
           {selectedTab === "home" && <HomePage />}
           {selectedTab === "educacion" && (
             <Education handleSelectTab={handleSelectTab} />
           )}
-          {selectedTab === "clases" && (<Clases handleSelectTab={handleSelectTab} />)}
+          {selectedTab === "clases" && (
+            <Clases handleSelectTab={handleSelectTab} />
+          )}
           {selectedTab === "practica" && <Practice />}
           {selectedTab === "glosario" && <Glosario />}
         </div>
@@ -34,5 +43,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

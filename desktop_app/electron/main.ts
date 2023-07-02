@@ -1,5 +1,10 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
+//import { spawn } from 'child_process';
+//import kill from 'tree-kill';
+
+//let terminal 
+//let isTerminating = false
 
 // The built directory structure
 //
@@ -19,7 +24,10 @@ let win: BrowserWindow | null
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
+
   win = new BrowserWindow({
+    width: 800,
+    height: 600,
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -40,8 +48,33 @@ function createWindow() {
   }
 }
 
-app.on('window-all-closed', () => {
-  win = null
+app.whenReady().then(() => {
+/*  const directoryPath = path.join(__dirname, '../../../backend_api/modules')
+  const command = 'uvicorn main:app';
+  terminal = spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
+    cwd: directoryPath,
+    shell: true,
+  });
+  */
+ //terminal.stdin.write(`${command}\n`)
+  createWindow()
 })
 
-app.whenReady().then(createWindow)
+/*app.on('before-quit', (event) => {
+  if (!isTerminating) {
+    event.preventDefault();
+    isTerminating = true;
+    kill(terminal.pid, 'SIGTERM', (err) => {
+      if (err) {
+        console.error('Failed to kill terminal process:', err);
+        isTerminating = false;
+      } else {
+        app.quit();
+      }
+    });
+  }
+});*/
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
