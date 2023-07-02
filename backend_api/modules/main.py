@@ -37,15 +37,13 @@ async def websocket_endpoint(websocket: WebSocket):
             result = processLetter(image, data[1], currentmode)
 
 
-        if result == "Error, not a hand":
+        if np.all(result == "Error, not a hand"):
                 if checker != "checker":
                     checker = "checker"
                     await websocket.send_text("")
-
-        elif result in ["Number", "Word", "Letter"]:
+        elif np.any(result == np.array(["Number", "Word", "Letter"])):
                 currentmode = result
                 await websocket.send_text("Changeing mode")
-        
         else:
             if currentmode == "Letter":
                 result = Lmodel.predict(result)
@@ -55,35 +53,3 @@ async def websocket_endpoint(websocket: WebSocket):
             if result != checker and result != "":
                 checker = result
                 await websocket.send_text(result)
-        
-
-
-
-
-        """
-        if currentmode == "Letter":
-            to_predict = processLetter(image, data[1], currentmode)
-            if to_predict == "Error, not a hand":
-                if checker != "checker":
-                    checker = "checker"
-                    await websocket.send_text("")
-            elif type(to_predict) is not str:
-                result = model.predict(to_predict)
-                if result != checker and result != "":
-                    checker = result
-                    await websocket.send_text(result)
-            elif to_predict in ["Number", "Word"]:
-                currentmode = to_predict
-                await websocket.send_text("Changeing mode") 
-
-        if currentmode == "Number":
-            result = processNumber(image, currentmode)
-            if result == "Error, not a hand" and result == checker:
-                await websocket.send_text("")
-            elif result in ["Letter", "Word"]:
-               currentmode = result
-               await websocket.send_text("Changeing mode")
-            else:
-               checker = result
-               await websocket.send_text(str(result))
-        """
