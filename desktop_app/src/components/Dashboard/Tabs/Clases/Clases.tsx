@@ -1,5 +1,5 @@
 import { useState } from "react";
-import gifImage from "src/data/gifts/frog-sitting.gif"; // Reemplaza la ruta con la ubicación de tu archivo GIF
+import gifImage from "src/data/gifts/frog-sitting.gif";
 import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
@@ -16,7 +16,7 @@ export default function Lessons({
 
   function openWebcam() {
     setCameraOpen(true);
-    const video = document.getElementById("video");
+    const video = document.getElementById("video") as HTMLVideoElement;
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -29,12 +29,15 @@ export default function Lessons({
         console.log("Error accessing webcam: " + error.toString());
       });
   }
-  let intervalId;
 
-  function obtainfps(video) {
+  let intervalId: NodeJS.Timeout;
+
+  function obtainfps(video: HTMLVideoElement) {
     intervalId = setInterval(() => {
-      const canvas = document.getElementById("canvas");
+      const canvas = document.getElementById("canvas") as HTMLCanvasElement;
       const context = canvas.getContext("2d");
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageData = canvas.toDataURL("image/jpeg");
       sendImages(imageData, WichEndPoint);
@@ -42,8 +45,11 @@ export default function Lessons({
   }
 
   function closeWebcam() {
+    const video = document.getElementById("video") as HTMLVideoElement;
     video.pause();
-    video.srcObject.getTracks().forEach((track) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    video.srcObject?.getTracks().forEach((track) => {
       track.stop();
     });
     video.srcObject = null;
@@ -84,13 +90,8 @@ export default function Lessons({
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
-            <video id="video" autoPlay className=" w-max h-max"></video>
-            <canvas
-              id="canvas"
-              width="640"
-              height="480"
-              className="hidden"
-            ></canvas>
+            <video id="video" autoPlay className="w-max h-max"></video>
+            <canvas id="canvas" width="640" height="480" className="hidden"></canvas>
           </div>
           {isCameraOpen ? (
             <button
@@ -116,3 +117,4 @@ export default function Lessons({
     </div>
   );
 }
+
