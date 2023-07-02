@@ -1,0 +1,9 @@
+uvicorn[standard]
+mediapipe
+onnxruntime
+numpy
+opencv-python
+wsproto
+websockets
+fastapi
+onnx
