@@ -3,6 +3,7 @@ import gifImage from "src/data/gifts/frog-sitting.gif"; // Reemplaza la ruta con
 import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
+import Progress from "./Progress";
 
 export default function Practice({ handleSelectTab }: { handleSelectTab: (value: selectedTabType) => void; }) {
 
@@ -87,11 +88,7 @@ export default function Practice({ handleSelectTab }: { handleSelectTab: (value:
       </div>
       <div className="divider"></div>
       <div className="w-full flex m-4">
-        <ul className="steps w-screen">
-          <li className="step step-primary">clases</li>
-          <li className="step step-primary">practica</li>
-          <li className="step">quiz</li>
-        </ul>
+      <Progress />
       </div>
     </div>
   );

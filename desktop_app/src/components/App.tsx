@@ -26,9 +26,9 @@ function App() {
         setDominantHand={setDominantHand}
       />
 
-      <div className="container h-full overflow-hidden">
+      <div className="container h-full overflow-hidden mx-auto">
         <Bubbles />
-        <div className="mainContainer  justify-center items-center h-full">
+        <div className="mainContainer justify-center items-center h-full">
           {selectedTab === "home" && <HomePage />}
           {selectedTab === "educacion" && (
             <Education handleSelectTab={handleSelectTab} />
