@@ -46,7 +46,6 @@ export default function Progress() {
 
   return (
       <div className="w-full">
-          <div className="divider"></div>
           <div className="w-full mx-auto">
             <div className="flex justify-between items-center pb-2 flex-col">
               <p className="text-xs text-green-400 font-bold">{`${progress}% Complete`}</p>
