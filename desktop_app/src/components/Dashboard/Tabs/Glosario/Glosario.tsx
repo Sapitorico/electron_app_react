@@ -1,14 +1,18 @@
-import gif1 from "src/data/gifts/frog-sitting.gif";
-import gif2 from "src/data/gifts/pato-caminando.gif";
-import gif3 from "src/data/gifts/dog.gif";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import React, { useState } from "react";
 
-const number_gifList = {
+import gif1 from "/src/data/gifts/frog-sitting.gif";
+import gif2 from "/src/data/gifts/pato-caminando.gif";
+import gif3 from "/src/data/gifts/dog.gif";
+
+const number_gifList: { [key: string]: string } = {
   "0": gif1,
   "1": gif2,
   "2": gif3,
 };
 
-const letter_gifList = {
+const letter_gifList: { [key: string]: string } = {
   A: gif1,
   B: gif2,
   C: gif3,
@@ -58,6 +62,8 @@ export default function Glossary() {
     "10",
   ];
 
+  const [showDialog, setShowDialog] = useState<number | null>(null);
+
   return (
     <div className="relative flex h-screen overflow-y-auto">
       <div>
@@ -67,19 +73,27 @@ export default function Glossary() {
             <div className="card" key={index}>
               <button
                 className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
-                onClick={() =>
-                  document.getElementById(`my_modal_${index}`).showModal()
-                }
+                onClick={() => setShowDialog(index)}
               >
                 {letter}
               </button>
-              <dialog id={`my_modal_${index}`} className="modal">
+              <dialog
+                open={showDialog === index}
+                onClose={() => setShowDialog(null)}
+                className="modal"
+              >
                 <form method="dialog" className="modal-box">
                   <div className="grid-cols-4">
-                  <img src={letter_gifList[letter]} alt="my-gif" className="mx-auto rounded-lg col-span-2 max-w-xs" />
+                    <img
+                      src={letter_gifList[letter]}
+                      alt={`GIF de ${letter}`}
+                      className="mx-auto rounded-lg col-span-2 max-w-xs"
+                    />
                   </div>
                   <div className="modal-action">
-                    <button className="btn btn-warning mx-auto text-base">Cerrar</button>
+                    <button className="btn btn-warning mx-auto text-base">
+                      Cerrar
+                    </button>
                   </div>
                 </form>
               </dialog>
@@ -92,18 +106,26 @@ export default function Glossary() {
             <div className="glosaryCardBody card" key={index}>
               <button
                 className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
-                onClick={() =>
-                  document.getElementById(`my_modal_${index}`).showModal()
-                }
+                onClick={() => setShowDialog(index)}
               >
                 {number}
               </button>
-              <dialog id={`my_modal_${index}`} className="modal">
+              <dialog
+                open={showDialog === index}
+                onClose={() => setShowDialog(null)}
+                className="modal"
+              >
                 <form method="dialog" className="modal-box">
                   <h3 className="font-bold text-lg">{number}</h3>
-                  <img src={number_gifList[number]} alt="my-gif" className="mx-auto rounded-lg col-span-2 max-w-xs" />
+                  <img
+                    src={number_gifList[number]}
+                    alt={`GIF de ${number}`}
+                    className="mx-auto rounded-lg col-span-2 max-w-xs"
+                  />
                   <div className="modal-action">
-                    <button className="btn btn-warning mx-auto text-base">Cerrar</button>
+                    <button className="btn btn-warning mx-auto text-base">
+                      Cerrar
+                    </button>
                   </div>
                 </form>
               </dialog>
