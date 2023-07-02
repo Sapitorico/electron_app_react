@@ -33,8 +33,11 @@ function App() {
           {selectedTab === "educacion" && (
             <Education handleSelectTab={handleSelectTab} />
           )}
-          {selectedTab === "clases" && (
-            <Clases handleSelectTab={handleSelectTab} />
+          {selectedTab === "clasesLetras" && (
+            <Clases handleSelectTab={handleSelectTab} WichEndPoint={0} />
+          )}
+          {selectedTab === "clasesNumeros" && (
+            <Clases handleSelectTab={handleSelectTab} WichEndPoint={1} />
           )}
           {selectedTab === "practica" && <Practice />}
           {selectedTab === "glosario" && <Glosario />}

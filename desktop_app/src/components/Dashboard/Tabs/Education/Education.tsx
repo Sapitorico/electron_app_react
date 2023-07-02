@@ -19,17 +19,27 @@ export default function Education({
                 <div className="card-actions flex-col justify-center gap-10">
                   <button
                     onClick={() => {
-                      handleSelectTab("clases");
+                      handleSelectTab("clasesLetras");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >
                     A - I
                   </button>
-                  <button className="btn btn-primary w-96 font-bold text-xl">
+                  <button
+                    onClick={() => {
+                      handleSelectTab("clasesLetras");
+                    }}
+                    className="btn btn-primary w-96 font-bold text-xl"
+                  >
                     J - Q
                   </button>
-                  <button className="btn btn-primary w-96 font-bold text-xl">
-                    R - z
+                  <button
+                    onClick={() => {
+                      handleSelectTab("clasesLetras");
+                    }}
+                    className="btn btn-primary w-96 font-bold text-xl"
+                  >
+                    R - Z
                   </button>
                 </div>
               </div>
@@ -38,7 +48,12 @@ export default function Education({
                   NÚMEROS
                 </h2>
                 <div className="card-actions flex-col justify-center gap-10">
-                  <button className="btn btn-primary w-96 font-bold text-xl">
+                  <button
+                    onClick={() => {
+                      handleSelectTab("clasesNumeros");
+                    }}
+                    className="btn btn-primary w-96 font-bold text-xl"
+                  >
                     0 - 10
                   </button>
                 </div>

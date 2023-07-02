@@ -1,10 +1,10 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
-//import { spawn } from 'child_process';
-//import kill from 'tree-kill';
+import { spawn } from 'child_process';
+import kill from 'tree-kill';
 
-//let terminal 
-//let isTerminating = false
+let terminal 
+let isTerminating = false
 
 // The built directory structure
 //
@@ -51,18 +51,18 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-/*  const directoryPath = path.join(__dirname, '../../backend_api/modules')
+ const directoryPath = path.join(__dirname, '../../backend_api/modules')
   const command = 'uvicorn main:app';
   terminal = spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
     cwd: directoryPath,
     shell: true,
   });
-  */
- //terminal.stdin.write(`${command}\n`)
+  
+  terminal.stdin.write(`${command}\n`)
   createWindow()
 })
 
-/*app.on('before-quit', (event) => {
+app.on('before-quit', (event) => {
   if (!isTerminating) {
     event.preventDefault();
     isTerminating = true;
@@ -75,7 +75,7 @@ app.whenReady().then(() => {
       }
     });
   }
-});*/
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
