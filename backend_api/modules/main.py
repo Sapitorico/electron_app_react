@@ -24,8 +24,8 @@ async def websocket_endpoint(websocket: WebSocket):
         data = json.loads(json_data)
         req = urllib.request.urlopen(data[0])
         arr_img = np.asarray(bytearray(req.read()), dtype=np.uint8)
-        image = cv2.imdecode(arr_img, -1)    
-        image = cv2.flip(image, 1) 
+        image = cv2.imdecode(arr_img, -1)
+        image = cv2.flip(image, 1)
 
         if currentmode == "Letter":
             result = processLetter(image, data[1], currentmode)
@@ -36,14 +36,13 @@ async def websocket_endpoint(websocket: WebSocket):
         elif currentmode == "Word":
             result = processLetter(image, data[1], currentmode)
 
-
         if np.all(result == "Error, not a hand"):
-                if checker != "checker":
-                    checker = "checker"
-                    await websocket.send_text("")
+            if checker != "checker":
+                checker = "checker"
+                await websocket.send_text("")
         elif np.any(result == np.array(["Number", "Word", "Letter"])):
-                currentmode = result
-                await websocket.send_text("Changeing mode")
+            currentmode = result
+            await websocket.send_text("Changeing mode")
         else:
             if currentmode == "Letter":
                 result = Lmodel.predict(result)
