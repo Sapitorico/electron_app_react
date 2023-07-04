@@ -112,10 +112,29 @@ class HandControl:
         if fingers_right == [0, 1, 1, 0, 0]:
             distance = math.sqrt((left_index_finger[0] - right_wrist[0]) ** 2 + (left_index_finger[1] - right_wrist[1]) ** 2)
             if distance < 10:
-                    return "Word"
-        
-               
-                    
+                    return "Word"             
+
+        return currentmode
+    
+    def change_mode2(self, image, result, currentmode):
+        hands = self.find_hands(image, result, flip_type=True)
+
+        if len(hands) != 1:
+            return currentmode
+
+        right_hand = None
+
+        for hand in hands:
+            hand_type = hand['type']
+            if hand_type == "Right":
+                right_hand = hand
+
+        if not (right_hand):
+            return currentmode
+
+        fingers_right = self.fingers_up(right_hand)
+        if fingers_right == [1, 0, 0, 0, 1]:
+            return "Next"
 
         return currentmode
 

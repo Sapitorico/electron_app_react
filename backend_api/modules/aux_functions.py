@@ -16,9 +16,14 @@ def processLetter(image, hand_type, currentmode):
         result = Base.detect_hands(image)
         copy_image = image.copy()
         if result.multi_hand_landmarks:
-            check = control.change_mode(image, result, currentmode)
-            if check != currentmode:
-                return(check)
+            if currentmode == "Const":
+                check = control.change_mode2(image, result, currentmode)
+                if check == 'Next':
+                    return(check)
+            if currentmode != "Const":    
+                check = control.change_mode(image, result, currentmode)
+                if check != currentmode:
+                    return(check)
             positions = Base.detect_hand_type(hand_type, result, copy_image)
             if len(positions) != 0:
                 resized_hand = Base.get_image_resized(positions, copy_image)
@@ -39,9 +44,14 @@ def processNumber(image, currentmode):
         result = Base.detect_hands(image)
         copy_image = image.copy()
         if result.multi_hand_landmarks:
-            check = control.change_mode(image, result, currentmode)
-            if check != currentmode:
-                return(check)
+            if currentmode == "Const":
+                check = control.change_mode2(image, result, currentmode)
+                if check == 'Next':
+                    return(check)
+            if currentmode != "Const":    
+                check = control.change_mode(image, result, currentmode)
+                if check != currentmode:
+                    return(check)
             number = control.count_fingers(copy_image, result)
             return str(number)
         return("Error, not a hand")

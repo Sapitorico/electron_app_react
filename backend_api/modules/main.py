@@ -53,3 +53,67 @@ async def websocket_endpoint(websocket: WebSocket):
             if result != checker and result != "":
                 checker = result
                 await websocket.send_text(result)
+        
+@app.websocket("/Letter")
+async def websocket_endpoint(websocket: WebSocket):
+    checker = "checker"
+    currentmode = "Const"
+    await websocket.accept()
+    while True:
+        json_data = await websocket.receive_text()
+
+        data = json.loads(json_data)
+        req = urllib.request.urlopen(data[0])
+        arr_img = np.asarray(bytearray(req.read()), dtype=np.uint8)
+        image = cv2.imdecode(arr_img, -1)    
+        image = cv2.flip(image, 1)
+
+        if currentmode == "Const":
+            result = processLetter(image, data[1], currentmode) 
+
+        if np.all(result == "Error, not a hand"):
+                if checker != "checker":
+                    checker = "checker"
+                    await websocket.send_text("")
+
+        elif np.all(result == "Next"):
+            if checker != "Next":
+                checker == "Next"
+                await websocket.send_text("Next")
+        else:
+            result = Lmodel.predict(result)
+            if result != checker and result != "":
+                checker = result
+                await websocket.send_text(result)
+        
+
+@app.websocket("/Number")
+async def websocket_endpoint(websocket: WebSocket):
+    checker = "checker"
+    currentmode = "Const"
+    await websocket.accept()
+    while True:
+
+        json_data = await websocket.receive_text()
+
+        data = json.loads(json_data)
+        req = urllib.request.urlopen(data[0])
+        arr_img = np.asarray(bytearray(req.read()), dtype=np.uint8)
+        image = cv2.imdecode(arr_img, -1)    
+        image = cv2.flip(image, 1)
+
+        result = processNumber(image, currentmode)
+        if np.all(result == "Error, not a hand"):
+                if checker != "checker":
+                    checker = "checker"
+                    await websocket.send_text("")
+
+        elif result == "Next":
+            if checker != "Next":
+                checker == "Next"
+                await websocket.send_text("Next")
+
+        else:
+             if result != checker and result != "":
+                checker = result
+                await websocket.send_text(result)
