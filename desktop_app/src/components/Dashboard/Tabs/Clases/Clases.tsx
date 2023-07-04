@@ -16,25 +16,20 @@ export default function Lessons({
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
   const [isCameraAvailable, setIsCameraAvailable] = useState(false);
 
-  function openWebcam() {
-    setCameraOpen(true);
-    setIsTryingToOpenCamera(true);
-    setIsCameraAvailable(true);
-    const video = document.getElementById("video") as HTMLVideoElement;
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        video.srcObject = stream;
-        video.play();
-        video.style.transform = "scaleX(-1)";
-        obtainfps(video);
-      })
-      .catch((error) => {
-        setIsTryingToOpenCamera(true);
-        setIsCameraAvailable(false);
-        console.log("Error accessing webcam: " + error.toString());
-      });
-  }
+  const openWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+      setCameraOpen(true);
+      setIsTryingToOpenCamera(true);
+      setIsCameraAvailable(true);
+      obtainfps(videoRef.current)
+    } catch (error) {
+      setIsTryingToOpenCamera(true);
+      setIsCameraAvailable(false);
+      console.error('Error opening webcam:', error);
+    }
+  };
 
   let intervalId: NodeJS.Timeout;
 
@@ -46,24 +41,19 @@ export default function Lessons({
       // @ts-ignore
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageData = canvas.toDataURL("image/jpeg");
-      sendImages(imageData, WichEndPoint);
+      sendImages(imageData, 2);
     }, 200);
   }
 
-  function closeWebcam() {
-    const video = document.getElementById("video") as HTMLVideoElement;
-    video.pause();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    video.srcObject?.getTracks().forEach((track) => {
-      track.stop();
-    });
-    video.srcObject = null;
-    clearInterval(intervalId);
+  const closeWebcam = () => {
+    const stream = videoRef.current.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
     setCameraOpen(false);
-
-    //location.reload()
-  }
+  };
 
   const handleDialogClose = () => {
     setIsTryingToOpenCamera(false);
