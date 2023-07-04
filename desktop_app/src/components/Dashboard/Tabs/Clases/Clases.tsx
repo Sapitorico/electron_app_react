@@ -16,34 +16,25 @@ export default function Lessons({
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
   const [isCameraAvailable, setIsCameraAvailable] = useState(false);
 
-  const openWebcam = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
-      setIsCameraOpen(true);
-      setIsTryingToOpenCamera(true);
-      setIsCameraAvailable(true);
-    } catch (error) {
-      setIsTryingToOpenCamera(true);
-      setIsCameraAvailable(false);
-      console.error('Error opening webcam:', error);
-    }
-  };
-
-  const closeWebcam = () => {
-    const stream = videoRef.current.srcObject;
-    if (stream) {
-      const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
-      videoRef.current.srcObject = null;
-    }
-    setIsCameraOpen(false);
-  };
-
-  const handleDialogClose = () => {
-    setIsTryingToOpenCamera(false);
-  };
-
+  function openWebcam() {
+    setCameraOpen(true);
+    setIsTryingToOpenCamera(true);
+    setIsCameraAvailable(true);
+    const video = document.getElementById("video") as HTMLVideoElement;
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play();
+        video.style.transform = "scaleX(-1)";
+        obtainfps(video);
+      })
+      .catch((error) => {
+        setIsTryingToOpenCamera(true);
+        setIsCameraAvailable(false);
+        console.log("Error accessing webcam: " + error.toString());
+      });
+  }
 
   let intervalId: NodeJS.Timeout;
 
@@ -58,6 +49,25 @@ export default function Lessons({
       sendImages(imageData, WichEndPoint);
     }, 200);
   }
+
+  function closeWebcam() {
+    const video = document.getElementById("video") as HTMLVideoElement;
+    video.pause();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    video.srcObject?.getTracks().forEach((track) => {
+      track.stop();
+    });
+    video.srcObject = null;
+    clearInterval(intervalId);
+    setCameraOpen(false);
+
+    //location.reload()
+  }
+
+  const handleDialogClose = () => {
+    setIsTryingToOpenCamera(false);
+  };
 
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
@@ -92,7 +102,12 @@ export default function Lessons({
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
             <video id="video" autoPlay className="w-max h-max"></video>
-            <canvas id="canvas" width="640" height="480" className="hidden"></canvas>
+            <canvas
+              id="canvas"
+              width="640"
+              height="480"
+              className="hidden"
+            ></canvas>
           </div>
           {isCameraOpen ? (
             <button
@@ -111,8 +126,11 @@ export default function Lessons({
           )}
           {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
             <dialog className="modal backgroundModal" open>
-              <form method="dialog" className="modal-box flex items-center flex-col h-52">
-                <label htmlFor="openCameraButton" className='m-8 font-medium'>
+              <form
+                method="dialog"
+                className="modal-box flex items-center flex-col h-52"
+              >
+                <label htmlFor="openCameraButton" className="m-8 font-medium">
                   Cámara no conectada, por favor conecte una.
                 </label>
                 <button
@@ -133,4 +151,3 @@ export default function Lessons({
     </div>
   );
 }
-
