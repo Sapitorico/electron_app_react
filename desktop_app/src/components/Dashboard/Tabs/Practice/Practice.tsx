@@ -60,12 +60,12 @@ export default function Practice() {
   };
 
   return (
-    <div
+    <><div
       className="grid flex-grow justify-center overflow-hidden artboard phone-1"
       style={{
         position: "relative",
         left: "22%",
-        top: "10%",
+        top: "4%",
         width: "80vh",
         height: "80vh",
       }}
@@ -74,7 +74,7 @@ export default function Practice() {
         className="grid flex-grow bg-base-200 justify-center rounded-box overflow-hidden artboard phone-1"
         style={{
           width: "100%",
-          height: "90%",
+          height: "87%",
         }}
       >
         <video
@@ -93,17 +93,21 @@ export default function Practice() {
           className="hidden"
         ></canvas>
         {isCameraOpen ? (
-          <button className="btn btn-primary" onClick={closeWebcam}>
-            Cerrar Webcam
-          </button>
+          <>
+            <button className="btn btn-primary" onClick={closeWebcam}>
+              Cerrar Webcam
+            </button>
+          </>
         ) : (
-          <button
-            id="openCameraButton"
-            className="btn btn-primary"
-            onClick={openWebcam}
-          >
-            Abrir Webcam
-          </button>
+          <>
+            <button
+              id="openCameraButton"
+              className="btn btn-primary"
+              onClick={openWebcam}
+            >
+              Abrir Webcam
+            </button>
+          </>
         )}
         {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
           <dialog className="modal backgroundModal" open>
@@ -125,5 +129,18 @@ export default function Practice() {
         )}
       </div>
     </div>
+    <div
+      style={{
+        width: "84vh",
+        height: "100px",
+        borderRadius: "15px",
+        backgroundColor: "transparent",
+        marginTop: "20px",
+        top: "-7%",
+        left: "20.8%",
+        position: "relative",
+      }}
+    >
+        <span className="flex flex-col p-4 border-primary border-[5px] m-4 items-center gap-4 rounded-box">Tu seña es:</span></div></>
   );
 }
