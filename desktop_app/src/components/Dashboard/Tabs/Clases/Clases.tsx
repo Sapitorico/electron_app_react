@@ -13,22 +13,37 @@ export default function Lessons({
   WichEndPoint: number;
 }) {
   const [isCameraOpen, setCameraOpen] = useState(false);
+  const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
+  const [isCameraAvailable, setIsCameraAvailable] = useState(false);
 
-  function openWebcam() {
-    setCameraOpen(true);
-    const video = document.getElementById("video") as HTMLVideoElement;
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        video.srcObject = stream;
-        video.play();
-        video.style.transform = "scaleX(-1)";
-        obtainfps(video);
-      })
-      .catch((error) => {
-        console.log("Error accessing webcam: " + error.toString());
-      });
-  }
+  const openWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+      setIsCameraOpen(true);
+      setIsTryingToOpenCamera(true);
+      setIsCameraAvailable(true);
+    } catch (error) {
+      setIsTryingToOpenCamera(true);
+      setIsCameraAvailable(false);
+      console.error('Error opening webcam:', error);
+    }
+  };
+
+  const closeWebcam = () => {
+    const stream = videoRef.current.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraOpen(false);
+  };
+
+  const handleDialogClose = () => {
+    setIsTryingToOpenCamera(false);
+  };
+
 
   let intervalId: NodeJS.Timeout;
 
@@ -42,20 +57,6 @@ export default function Lessons({
       const imageData = canvas.toDataURL("image/jpeg");
       sendImages(imageData, WichEndPoint);
     }, 200);
-  }
-
-  function closeWebcam() {
-    const video = document.getElementById("video") as HTMLVideoElement;
-    video.pause();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    video.srcObject?.getTracks().forEach((track) => {
-      track.stop();
-    });
-    video.srcObject = null;
-    clearInterval(intervalId);
-    setCameraOpen(false);
-    //location.reload()
   }
 
   return (
@@ -107,6 +108,21 @@ export default function Lessons({
             >
               Abrir Webcam
             </button>
+          )}
+          {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
+            <dialog className="modal backgroundModal" open>
+              <form method="dialog" className="modal-box flex items-center flex-col h-52">
+                <label htmlFor="openCameraButton" className='m-8 font-medium'>
+                  Cámara no conectada, por favor conecte una.
+                </label>
+                <button
+                  className="btn btn-warning mx-auto text-base"
+                  onClick={handleDialogClose}
+                >
+                  Cerrar
+                </button>
+              </form>
+            </dialog>
           )}
         </div>
       </div>
