@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import gifImage from "src/data/gifts/frog-sitting.gif";
 import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
@@ -16,41 +16,60 @@ export default function Lessons({
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
   const [isCameraAvailable, setIsCameraAvailable] = useState(false);
 
-  const openWebcam = async () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  let intervalId: NodeJS.Timeout;
+
+  useEffect(() => {
+    checkCameraAvailability();
+  }, []);
+
+  const checkCameraAvailability = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
-      setCameraOpen(true);
-      setIsTryingToOpenCamera(true);
-      setIsCameraAvailable(true);
-      obtainfps(videoRef.current)
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasCamera = devices.some((device) => device.kind === "videoinput");
+      setIsCameraAvailable(hasCamera);
     } catch (error) {
-      setIsTryingToOpenCamera(true);
       setIsCameraAvailable(false);
-      console.error('Error opening webcam:', error);
+      console.error("Error checking camera availability:", error);
     }
   };
 
-  let intervalId: NodeJS.Timeout;
+  const openWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setCameraOpen(true);
+      setIsTryingToOpenCamera(true);
+      obtainfps(videoRef.current);
+    } catch (error) {
+      setIsTryingToOpenCamera(true);
+      setIsCameraAvailable(false);
+      console.error("Error opening webcam:", error);
+    }
+  };
 
-  function obtainfps(video: HTMLVideoElement) {
-    intervalId = setInterval(() => {
-      const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-      const context = canvas.getContext("2d");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL("image/jpeg");
-      sendImages(imageData, 2);
-    }, 200);
-  }
+  const obtainfps = (video: HTMLVideoElement | null) => {
+    if (video) {
+      intervalId = setInterval(() => {
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+        const context = canvas.getContext("2d");
+        if (context) {
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = canvas.toDataURL("image/jpeg");
+          sendImages(imageData, 2);
+        }
+      }, 200);
+    }
+  };
 
   const closeWebcam = () => {
-    const stream = videoRef.current.srcObject;
+    const stream = videoRef.current?.srcObject as MediaStream;
     if (stream) {
       const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
-      videoRef.current.srcObject = null;
+      tracks.forEach((track) => track.stop());
+      videoRef.current!.srcObject = null;
     }
     setCameraOpen(false);
   };
@@ -91,7 +110,7 @@ export default function Lessons({
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
-            <video id="video" autoPlay className="w-max h-max"></video>
+            <video id="video" ref={videoRef} autoPlay className="w-max h-max"></video>
             <canvas
               id="canvas"
               width="640"
