@@ -69,9 +69,12 @@ export default function Lessons({
     if (stream) {
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
-      videoRef.current!.srcObject = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
     }
     setCameraOpen(false);
+    setIsTryingToOpenCamera(false);
   };
 
   const handleDialogClose = () => {
