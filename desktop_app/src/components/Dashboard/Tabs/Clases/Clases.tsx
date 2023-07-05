@@ -1,13 +1,73 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import React, { useState, useRef, useEffect } from "react";
-import gifImage from "src/data/gifts/frog-sitting.gif";
+import gifImageA from "src/data/gifts/A.gif";
+import gifImageB from "src/data/gifts/B.gif";
+import gifImageC from "src/data/gifts/C.gif";
+import gifImageD from "src/data/gifts/D.gif";
+import gifImageE from "src/data/gifts/E.gif";
+import gifImageF from "src/data/gifts/F.gif";
+import gifImageG from "src/data/gifts/G.gif";
+import gifImageH from "src/data/gifts/H.gif";
+import gifImageI from "src/data/gifts/I.gif";
+import gifImageJ from "src/data/gifts/J.gif";
+import gifImageK from "src/data/gifts/K.gif";
+import gifImageL from "src/data/gifts/L.gif";
+import gifImageM from "src/data/gifts/M.gif";
+import gifImageN from "src/data/gifts/N.gif";
+import gifImagenie from "src/data/gifts/Ñ.gif";
+import gifImageO from "src/data/gifts/O.gif";
+import gifImageP from "src/data/gifts/P.gif";
+import gifImageQ from "src/data/gifts/Q.gif";
+import gifImageR from "src/data/gifts/R.gif";
+import gifImageS from "src/data/gifts/S.gif";
+import gifImageT from "src/data/gifts/T.gif";
+import gifImageU from "src/data/gifts/U.gif";
+import gifImageV from "src/data/gifts/V.gif";
+import gifImageW from "src/data/gifts/W.gif";
+import gifImageX from "src/data/gifts/X.gif";
+import gifImageY from "src/data/gifts/Y.gif";
+import gifImageZ from "src/data/gifts/Z.gif";
 import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
-import Progress from "./Progress";
+
+const giftsLessons1 = {
+  A: gifImageA,
+  B: gifImageB,
+  C: gifImageC,
+  D: gifImageD,
+  E: gifImageE,
+  F: gifImageF,
+  G: gifImageG,
+  H: gifImageH,
+  I: gifImageI,
+};
+const giftsLessons2 = {
+  A: gifImageJ,
+  B: gifImageK,
+  C: gifImageL,
+  D: gifImageM,
+  E: gifImageN,
+  F: gifImagenie,
+  G: gifImageO,
+  H: gifImageP,
+  I: gifImageQ,
+};
+const giftsLessons3 = {
+  A: gifImageR,
+  B: gifImageS,
+  C: gifImageT,
+  D: gifImageU,
+  E: gifImageV,
+  F: gifImageW,
+  G: gifImageX,
+  H: gifImageY,
+  I: gifImageZ,
+};
 
 export default function Lessons({
   handleSelectTab,
-  WichEndPoint,
 }: {
   handleSelectTab: (value: selectedTabType) => void;
   WichEndPoint: number;
@@ -15,8 +75,12 @@ export default function Lessons({
   const [isCameraOpen, setCameraOpen] = useState(false);
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
   const [isCameraAvailable, setIsCameraAvailable] = useState(false);
+  const [currentGif, setCurrentGif] = useState("A");
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let intervalId: NodeJS.Timeout;
 
   useEffect(() => {
@@ -81,6 +145,13 @@ export default function Lessons({
     setIsTryingToOpenCamera(false);
   };
 
+  const handleNextGif = () => {
+    const gifKeys = Object.keys(giftsLessons2);
+    const currentGifIndex = gifKeys.indexOf(currentGif);
+    const nextGifIndex = (currentGifIndex + 1) % gifKeys.length;
+    setCurrentGif(gifKeys[nextGifIndex]);
+  };
+
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
       <div className="flex items-center w-20">
@@ -109,11 +180,19 @@ export default function Lessons({
       </div>
       <div className="divider"></div>
       <div className="flex flex-grow justify-center items-center">
-        <ImgDisplay gifImage={gifImage} />
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <ImgDisplay gifImage={giftsLessons2[currentGif]} />
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
-            <video id="video" ref={videoRef} autoPlay className="w-max h-max"></video>
+            <video
+              id="video"
+              ref={videoRef}
+              autoPlay
+              className="w-max h-max"
+              style={{ transform: "scaleX(-1)" }}
+            ></video>
             <canvas
               id="canvas"
               width="640"
@@ -158,7 +237,12 @@ export default function Lessons({
       </div>
       <div className="divider"></div>
       <div className="w-full flex m-4">
-        <Progress />
+        <button
+          className="btn btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
+          onClick={handleNextGif}
+        >
+          Next Gif
+        </button>
       </div>
     </div>
   );

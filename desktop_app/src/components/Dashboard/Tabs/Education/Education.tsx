@@ -6,7 +6,7 @@ export default function Education({
   handleSelectTab: (value: selectedTabType) => void;
 }) {
   return (
-    <div className=" mainContainer flex h-full w-full justify-center">
+    <div className="mainContainer flex h-full w-full justify-center">
       <div className="flex p-16 gap-11">
         <div className="card bg-base-100 justify-center shadow-2xl shadow-black">
           <div className="card-body grow-0">
