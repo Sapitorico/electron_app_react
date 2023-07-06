@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React, { useState, useRef, useEffect } from "react";
+import { dominantHandType, fullScreenType } from "@/types/dataTypes";
 import gifImageA from "src/data/gifts/A.gif";
 import gifImageB from "src/data/gifts/B.gif";
 import gifImageC from "src/data/gifts/C.gif";
@@ -69,9 +70,14 @@ const giftsLessons3 = {
 
 export default function Lessons({
   handleSelectTab,
+  WichEndPoint,
+  setFullScreen,
+  dominantHand,
 }: {
   handleSelectTab: (value: selectedTabType) => void;
   WichEndPoint: number;
+  setFullScreen: (value: fullScreenType) => void;
+  dominantHand: dominantHandType;
 }) {
   const [isCameraOpen, setCameraOpen] = useState(false);
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
@@ -123,7 +129,7 @@ export default function Lessons({
         if (context) {
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
           const imageData = canvas.toDataURL("image/jpeg");
-          sendImages(imageData, 2);
+          sendImages(imageData, WichEndPoint, dominantHand);
         }
       }, 200);
     }
@@ -138,6 +144,7 @@ export default function Lessons({
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+    clearInterval(intervalId);
     setCameraOpen(false);
     setIsTryingToOpenCamera(false);
   };
@@ -159,7 +166,8 @@ export default function Lessons({
         <button
           className="btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
           onClick={() => {
-            handleSelectTab("educacion");
+            handleSelectTab("home");
+            setFullScreen("no");
           }}
         >
           <svg
@@ -184,7 +192,7 @@ export default function Lessons({
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         {/*<ImgDisplay gifImage={giftsLessons2[currentGif]} />*/}
-      <Carousel />
+        <Carousel />
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">

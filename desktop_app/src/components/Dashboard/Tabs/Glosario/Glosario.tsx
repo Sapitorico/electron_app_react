@@ -107,9 +107,7 @@ export default function Glossary() {
               <button
                 className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
                 onClick={() => setShowDialog(index)}
-              >
-                {number}
-              </button>
+              ></button>
               <dialog
                 open={showDialog === index}
                 onClose={() => setShowDialog(null)}

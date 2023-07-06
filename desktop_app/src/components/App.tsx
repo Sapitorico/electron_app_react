@@ -8,6 +8,7 @@ import Glosario from "./Dashboard/Tabs/Glosario/Glosario";
 import Clases from "./Dashboard/Tabs/Clases/Clases";
 import Bubbles from "./bubbleAnimation";
 import { dominantHandType } from "@/types/dataTypes";
+import { fullScreenType } from "@/types/dataTypes";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
@@ -15,34 +16,59 @@ function App() {
     setSelectedTab(value);
   };
 
-  const [dominantHand, setDominantHand] = useState<dominantHandType>("derecha");
+  const [dominantHand, setDominantHand] = useState<dominantHandType>("Right");
+  const [fullscreen, setFullScreen] = useState<fullScreenType>("no");
 
   return (
     <div className="flex w-full h-screen bg-base-100 ">
-      <Dashboard
-        selectedTab={selectedTab}
-        handleSelectTab={handleSelectTab}
-        dominantHand={dominantHand}
-        setDominantHand={setDominantHand}
-      />
+      {fullscreen === "no" && (
+        <div className="flex w-full h-screen bg-base-100 ">
+          <Dashboard
+            selectedTab={selectedTab}
+            handleSelectTab={handleSelectTab}
+            dominantHand={dominantHand}
+            setDominantHand={setDominantHand}
+          />
 
-      <div className="container h-full overflow-hidden mx-auto">
-        <Bubbles />
-        <div className="mainContainer justify-center items-center h-full">
-          {selectedTab === "home" && <HomePage />}
-          {selectedTab === "educacion" && (
-            <Education handleSelectTab={handleSelectTab} />
-          )}
-          {selectedTab === "clasesLetras" && (
-            <Clases handleSelectTab={handleSelectTab} WichEndPoint={0} />
-          )}
-          {selectedTab === "clasesNumeros" && (
-            <Clases handleSelectTab={handleSelectTab} WichEndPoint={1} />
-          )}
-          {selectedTab === "practica" && <Practice />}
-          {selectedTab === "glosario" && <Glosario />}
+          <div className="container h-full overflow-hidden mx-auto">
+            <Bubbles />
+            <div className="mainContainer justify-center items-center h-full">
+              {selectedTab === "home" && <HomePage />}
+              {selectedTab === "educacion" && (
+                <Education
+                  handleSelectTab={handleSelectTab}
+                  setFullScreen={setFullScreen}
+                />
+              )}
+              {selectedTab === "practica" && <Practice />}
+              {selectedTab === "glosario" && <Glosario />}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+      {fullscreen === "yes" && (
+        <div className=" h-full overflow-hidden mx-auto">
+          <Bubbles />
+          <div className="mainContainer justify-center items-center h-full">
+            {selectedTab === "clasesLetras" && (
+              <Clases
+                handleSelectTab={handleSelectTab}
+                WichEndPoint={0}
+                setFullScreen={setFullScreen}
+                dominantHand={dominantHand}
+              />
+            )}
+            {selectedTab === "clasesNumeros" && (
+              <Clases
+                handleSelectTab={handleSelectTab}
+                WichEndPoint={1}
+                setFullScreen={setFullScreen}
+                dominantHand={dominantHand}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

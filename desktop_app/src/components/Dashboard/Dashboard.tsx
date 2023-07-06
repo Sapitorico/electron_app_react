@@ -8,7 +8,7 @@ export default function Dashboard({
   dominantHand,
   setDominantHand,
 }: {
-  selectedTab: string;
+  selectedTab: selectedTabType;
   handleSelectTab: (value: selectedTabType) => void;
   dominantHand: string;
   setDominantHand: (value: dominantHandType) => void;
@@ -18,7 +18,7 @@ export default function Dashboard({
 
   useEffect(() => {
     const tabs = document.querySelectorAll(".tabs li");
-    const {offsetTop: activeTabTop} = tabs[activeIndex];
+    const { offsetTop: activeTabTop } = tabs[activeIndex];
 
     setAnimationStyle({ top: activeTabTop });
   }, [activeIndex]);
@@ -72,7 +72,7 @@ export default function Dashboard({
           <li
             onClick={() => handleSelectTabWithAnimation("educacion", 1)}
             className={`stat ${
-              selectedTab === "educacion" || selectedTab === "clases"
+              selectedTab === "educacion"
                 ? "dashTags flex items-center"
                 : "flex items-center text-xl font-semibold"
             }`}
@@ -105,7 +105,9 @@ export default function Dashboard({
             </a>
           </li>
           <li
-            onClick={() => handleSelectTabWithAnimation("practica", 2)}
+            onClick={() => {
+              handleSelectTabWithAnimation("practica", 2);
+            }}
             className={`stat ${
               selectedTab === "practica"
                 ? "dashTags flex items-center"
@@ -188,11 +190,9 @@ export default function Dashboard({
           <button
             name="hand"
             value="Left"
-            className={`btn ${
-              dominantHand === "izquierda" ? "btn-active" : ""
-            }`}
+            className={`btn ${dominantHand === "Left" ? "btn-active" : ""}`}
             onClick={() => {
-              setDominantHand("izquierda");
+              setDominantHand("Left");
             }}
           >
             Izquierda
@@ -201,9 +201,9 @@ export default function Dashboard({
           <button
             name="hand"
             value="Right"
-            className={`btn ${dominantHand === "derecha" ? "btn-active" : ""}`}
+            className={`btn ${dominantHand === "Right" ? "btn-active" : ""}`}
             onClick={() => {
-              setDominantHand("derecha");
+              setDominantHand("Right");
             }}
           >
             Derecha
