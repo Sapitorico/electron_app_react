@@ -34,34 +34,34 @@
 }
 
 @keyframes carousel-animate-vertical {
-  /*0% {*/
-  /*  transform: translateY(100%) scale(0.5);*/
-  /*  opacity: 0;*/
-  /*  visibility: hidden;*/
-  /*}*/
-  /*4%, 20% {*/
-  /*  transform: translateY(100%) scale(0.7);*/
-  /*  opacity: 0;*/
-  /*  visibility: visible;*/
-  /*}*/
+  0% {
+    transform: translateY(100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
+  4%, 20% {
+    transform: translateY(100%) scale(0.7);
+    opacity: 0;
+    visibility: visible;
+  }
   26%, 52% {
     transform: translateY(0) scale(1);
     opacity: 1;
     visibility: visible;
   }
-  /*56%, 82% {*/
-  /*  transform: translateY(-100%) scale(0.7);*/
-  /*  opacity: 0;*/
-  /*  visibility: visible;*/
-  /*}*/
-  /*86% {*/
-  /*  transform: translateY(-100%) scale(0.5);*/
-  /*  opacity: 0;*/
-  /*  visibility: visible;*/
-  /*}*/
-  /*100% {*/
-  /*  transform: translateY(-100%) scale(0.5);*/
-  /*  opacity: 0;*/
-  /*  visibility: hidden;*/
-  /*}*/
+  56%, 82% {
+    transform: translateY(-100%) scale(0.7);
+    opacity: 0;
+    visibility: visible;
+  }
+  86% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-100%) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
+  }
 }
