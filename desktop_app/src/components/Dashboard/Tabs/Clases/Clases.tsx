@@ -31,6 +31,7 @@ import gifImageZ from "src/data/gifts/Z.gif";
 import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
+import Carousel from "./testeo/Carousel";
 
 const giftsLessons1 = {
   A: gifImageA,
@@ -182,7 +183,8 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
-        <ImgDisplay gifImage={giftsLessons2[currentGif]} />
+        {/*<ImgDisplay gifImage={giftsLessons2[currentGif]} />*/}
+      <Carousel />
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
