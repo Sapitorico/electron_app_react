@@ -77,7 +77,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
         elif np.all(result == "Next"):
             if checker != "Next":
-                checker == "Next"
+                checker = "Next"
                 await websocket.send_text("Next")
         else:
             result = Lmodel.predict(result)
@@ -109,7 +109,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
         elif result == "Next":
             if checker != "Next":
-                checker == "Next"
+                checker = "Next"
                 await websocket.send_text("Next")
 
         else:
