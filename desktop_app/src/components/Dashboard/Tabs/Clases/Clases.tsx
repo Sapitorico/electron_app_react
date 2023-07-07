@@ -33,6 +33,8 @@ import { selectedTabType } from "@/types/dataTypes";
 import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
 import Carousel from "./testeo/Carousel";
+import { setMessageCallback } from "@/components/websocket/socket";
+import { socket } from "@/components/websocket/socket";
 
 const giftsLessons1 = {
   A: gifImageA,
@@ -67,7 +69,6 @@ const giftsLessons3 = {
   H: gifImageY,
   I: gifImageZ,
 };
-
 export default function Lessons({
   handleSelectTab,
   WichEndPoint,
@@ -88,7 +89,7 @@ export default function Lessons({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let intervalId: NodeJS.Timeout;
+  let intervalId: number;
 
   useEffect(() => {
     checkCameraAvailability();
@@ -134,8 +135,10 @@ export default function Lessons({
       }, 200);
     }
   };
-
   const closeWebcam = () => {
+    for (let i = 0; i <= 20; i++) {
+      clearInterval(i);
+    }
     const stream = videoRef.current?.srcObject as MediaStream;
     if (stream) {
       const tracks = stream.getTracks();
@@ -144,9 +147,11 @@ export default function Lessons({
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
-    clearInterval(intervalId);
     setCameraOpen(false);
     setIsTryingToOpenCamera(false);
+    if (socket) {
+      socket.close();
+    }
   };
 
   const handleDialogClose = () => {
@@ -159,6 +164,14 @@ export default function Lessons({
     const nextGifIndex = (currentGifIndex + 1) % gifKeys.length;
     setCurrentGif(gifKeys[nextGifIndex]);
   };
+  const getMessage = (message: string) => {
+    console.log(message);
+    return message;
+  };
+
+  useEffect(() => {
+    setMessageCallback(getMessage);
+  }, []);
 
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
@@ -166,6 +179,7 @@ export default function Lessons({
         <button
           className="btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
           onClick={() => {
+            closeWebcam();
             handleSelectTab("home");
             setFullScreen("no");
           }}
@@ -195,6 +209,12 @@ export default function Lessons({
         <Carousel />
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
+          <canvas
+            id="canvas"
+            width="640"
+            height="480"
+            className="hidden"
+          ></canvas>
           <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
             <video
               id="video"
@@ -203,12 +223,6 @@ export default function Lessons({
               className="w-max h-max"
               style={{ transform: "scaleX(-1)" }}
             ></video>
-            <canvas
-              id="canvas"
-              width="640"
-              height="480"
-              className="hidden"
-            ></canvas>
           </div>
           {isCameraOpen ? (
             <button
