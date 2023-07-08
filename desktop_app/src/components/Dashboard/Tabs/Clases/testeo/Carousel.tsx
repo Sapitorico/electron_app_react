@@ -1,5 +1,5 @@
-import React from 'react';
 import "./style.css";
+import React, { useState } from 'react';
 import A from "src/data/image/A.jpg";
 import B from "src/data/image/B.jpg";
 import C from "src/data/image/C.jpg";
@@ -23,13 +23,23 @@ const letters = [
 ];
 
 const Carousel = () => {
+  const [carouselPosition, setCarouselPosition] = useState(1);
+
+  const handleMoveUp = () => {
+    setCarouselPosition(carouselPosition - 1);
+  };
+
+  const handleMoveDown = () => {
+    setCarouselPosition(carouselPosition + 1);
+  };
+
   return (
-    <div className="w-screen flex justify-center">
-      <div className="relative w-full max-w-500 mx-auto flex justify-center flex-col">
+    <div className="w-screen flex justify-centier">
+      <div className="relative w-full max-w-lg mx-auto flex justify-center flex-col">
         {letters.map((item, index) => (
           <div
             className="carousel__item flex items-center absolute w-full px-12 opacity-0 filter will-change-transform"
-            style={{ animationDelay: `calc(3s * ${index - 1})` }}
+            style={{ animationDelay: `calc(3s * ${index - carouselPosition})` }}
             key={index}
           >
             <div className="carousel__item-head">
@@ -40,6 +50,14 @@ const Carousel = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center mt-4">
+        <button onClick={handleMoveUp} className="mr-2">
+          Mover hacia arriba
+        </button>
+        <button onClick={handleMoveDown}>
+          Mover hacia abajo
+        </button>
       </div>
     </div>
   );

@@ -1,11 +1,10 @@
 .carousel__item {
-  animation: carousel-animate-vertical 6s linear;
+  animation: carousel-animate-vertical 6s linear paused;
 }
 
 .carousel__item-head {
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
   border-radius: 50%;
-  /*background-color: #1de9b6;*/
   background-color: #ffffff;
   width: 90px;
   height: 90px;
@@ -24,7 +23,7 @@
   width: 100%;
   background-color: #fff;
   border-radius: 8px;
-  padding: 16px 20px 16px 70px;
+  padding: 16px 20px 16px 20px;
 }
 
 .letter_image {
@@ -65,3 +64,4 @@
     visibility: hidden;
   }
 }
+
