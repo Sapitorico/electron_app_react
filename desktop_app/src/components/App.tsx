@@ -9,6 +9,7 @@ import Clases from "./Dashboard/Tabs/Clases/Clases";
 import Bubbles from "./bubbleAnimation";
 import { dominantHandType } from "@/types/dataTypes";
 import { fullScreenType } from "@/types/dataTypes";
+import PracticeMenu from "./Dashboard/Tabs/Practice/Practice";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
@@ -40,7 +41,12 @@ function App() {
                   setFullScreen={setFullScreen}
                 />
               )}
-              {selectedTab === "practica" && <Practice />}
+              {selectedTab === "practica" && (
+                <PracticeMenu
+                  handleSelectTab={handleSelectTab}
+                  setFullScreen={setFullScreen}
+                />
+              )}
               {selectedTab === "glosario" && <Glosario />}
             </div>
           </div>
