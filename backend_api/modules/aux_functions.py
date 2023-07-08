@@ -17,7 +17,7 @@ def processLetter(image, hand_type, currentmode):
         copy_image = image.copy()
         if result.multi_hand_landmarks:
             if currentmode == "Const":
-                check = control.change_mode2(image, result, currentmode)
+                check = control.change_mode2(image, result, currentmode, hand_type)
                 if check == 'Next':
                     return(check)
             if currentmode != "Const":    
@@ -31,7 +31,7 @@ def processLetter(image, hand_type, currentmode):
             
         return("Error, not a hand")
     
-def processNumber(image, currentmode):
+def processNumber(image, currentmode, hand_type):
     """
     Function that recieves the stream frame (image)
     Returns: if success: The number taht has been obtained with count_fingers fucntion
@@ -45,7 +45,7 @@ def processNumber(image, currentmode):
         copy_image = image.copy()
         if result.multi_hand_landmarks:
             if currentmode == "Const":
-                check = control.change_mode2(image, result, currentmode)
+                check = control.change_mode2(image, result, currentmode, hand_type)
                 if check == 'Next':
                     return(check)
             if currentmode != "Const":    

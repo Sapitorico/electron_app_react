@@ -116,23 +116,25 @@ class HandControl:
 
         return currentmode
     
-    def change_mode2(self, image, result, currentmode):
+    def change_mode2(self, image, result, currentmode, current_hand):
         hands = self.find_hands(image, result, flip_type=True)
 
         if len(hands) != 1:
             return currentmode
-
-        right_hand = None
+        
+        hand_to_use = None
 
         for hand in hands:
             hand_type = hand['type']
-            if hand_type == "Right":
-                right_hand = hand
+            if current_hand == "Right" and hand_type == "Left":
+                hand_to_use = hand
+            elif current_hand == "Left" and hand_type == "Right":
+                hand_to_use = hand
 
-        if not (right_hand):
+        if not (hand_to_use):
             return currentmode
 
-        fingers_right = self.fingers_up(right_hand)
+        fingers_right = self.fingers_up(hand_to_use)
         if fingers_right == [1, 0, 0, 0, 1]:
             return "Next"
 
@@ -173,7 +175,7 @@ if __name__ == "__main__":
             result = Base.detect_hands(image)
             if result.multi_hand_landmarks:
                 xd =""
-                xd = control.change_mode(image, result, "")  
+                xd = control.change_mode2(image, result, "Const", "Left")  
                 print(xd)
                 
                 fingers = control.count_fingers(image, result)

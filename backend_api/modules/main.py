@@ -101,7 +101,7 @@ async def websocket_endpoint(websocket: WebSocket):
         image = cv2.imdecode(arr_img, -1)    
         image = cv2.flip(image, 1)
 
-        result = processNumber(image, currentmode)
+        result = processNumber(image, currentmode, data[1])
         if np.all(result == "Error, not a hand"):
                 if checker != "checker":
                     checker = "checker"
