@@ -1,65 +1,17 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import React from "react";
-import styled from "@emotion/styled";
 import { Spring, animated } from "react-spring";
-import { withGesture } from "react-with-gesture";
 
-interface SlideProps {
-  content: React.ReactNode;
-  offsetRadius: number;
-  index: number;
-  animationConfig: {
-    tension: number;
-    friction: number;
-  };
-  moveSlide: (direction: number) => void;
-  delta: [number, number];
-  down: boolean;
-  up: boolean;
-}
+// Componente de contenedor del slide
+const SlideContainer = animated.div;
 
-const SlideContainer = styled(animated.div)`
-  position: absolute;
-  height: 70%;
-  top: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: 50% 50%;
-`;
-
-const SlideCard = styled(animated.div)`
-  position: relative;
-  max-width: 50%;
-  min-width: 30%;
-  width: 100vw;
-  height: 100%;
-  background: white;
-  font-size: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: 50% 50%;
-`;
-
-function Slide({
-  content,
-  offsetRadius,
-  index,
-  animationConfig,
-  moveSlide,
-  delta,
-  down,
-}: SlideProps) {
+// Componente de Slide
+function Slide({ content, offsetRadius, index, animationConfig}) {
   const offsetFromMiddle = index - offsetRadius;
-  const totalPresentables = 2 * offsetRadius + 1 ;
-  const distanceFactor = 1 - Math.abs(offsetFromMiddle / (offsetRadius));
-
-  // const offsetCardClick = (i: number): void => {
-  //   console.log(i);
-  // };
-
-  const translateYoffset =
-    50 * (Math.abs(offsetFromMiddle) / (offsetRadius + 1));
+  const totalPresentables = 2 * offsetRadius + 1;
+  const distanceFactor = 1 - Math.abs(offsetFromMiddle / offsetRadius);
+  const translateYoffset = 50 * (Math.abs(offsetFromMiddle) / (offsetRadius + 1));
   let translateY = -50;
 
   if (offsetRadius !== 0) {
@@ -70,15 +22,6 @@ function Slide({
     }
   }
 
-  if (offsetFromMiddle === 0 && down) {
-    translateY += delta[1] / (offsetRadius + 1);
-    if (translateY > -40) {
-      moveSlide(-1);
-    }
-    if (translateY < -100) {
-      moveSlide(1);
-    }
-  }
   if (offsetFromMiddle > 0) {
     translateY += translateYoffset;
   } else if (offsetFromMiddle < 0) {
@@ -92,24 +35,30 @@ function Slide({
         top: `${
           offsetRadius === 0 ? 50 : 50 + (offsetFromMiddle * 50) / offsetRadius
         }%`,
-        opacity: distanceFactor * distanceFactor
+        opacity: distanceFactor * distanceFactor,
       }}
       config={animationConfig}
     >
       {(style) => (
         <SlideContainer
+          className="absolute h-[100%] top-[50%] flex items-center justify-center origin-[50%_50%]"
           style={{
             ...style,
-            zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2)
+            zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2),
           }}
         >
-          <SlideCard onClick={() => moveSlide(offsetFromMiddle)}>
+          <div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">
+            {content.key}
+          </div>
+          <div className="w-[50%] bg-white rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]">
             {content}
-          </SlideCard>
+          </div>
         </SlideContainer>
       )}
     </Spring>
   );
 }
 
-export default withGesture()(Slide);
+export default Slide;
+
+

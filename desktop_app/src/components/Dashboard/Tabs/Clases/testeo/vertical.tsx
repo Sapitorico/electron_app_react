@@ -1,10 +1,8 @@
-import React, { Component, KeyboardEvent } from "react";
-import styled from "@emotion/styled";
+import React from "react";
 import Slide from "./Slide";
-import PropTypes from "prop-types";
 
 interface Slide {
-  key: any;
+  key: string;
   content: React.ReactNode;
 }
 
@@ -21,57 +19,11 @@ interface VerticalCarouselProps {
 
 interface VerticalCarouselState {
   index: number;
-  goToSlide: number | null;
-  prevPropsGoToSlide: number;
-  newSlide: boolean;
 }
 
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-`;
-
-const NavigationButtons = styled.div`
-  position: relative;
-  display: flex;
-  height: 60px;
-  margin: 0 auto;
-  width: 20%;
-  margin-top: 1rem;
-  justify-content: space-between;
-  z-index: 1000;
-`;
-
-const NavBtn = styled.div`
-  background: white;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-`;
-
-function mod(a: number, b: number): number {
-  return ((a % b) + b) % b;
-}
-
-class VerticalCarousel extends Component<VerticalCarouselProps, VerticalCarouselState> {
-  static propTypes = {
-    slides: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.any,
-        content: PropTypes.object,
-      })
-    ).isRequired,
-    goToSlide: PropTypes.number,
-    showNavigation: PropTypes.bool,
-    offsetRadius: PropTypes.number,
-    animationConfig: PropTypes.object,
-  };
-
+class VerticalCarousel extends React.Component<VerticalCarouselProps, VerticalCarouselState> {
   static defaultProps = {
-    offsetRadius: 2,
+    offsetRadius: 1,
     animationConfig: { tension: 120, friction: 14 },
   };
 
@@ -79,55 +31,35 @@ class VerticalCarousel extends Component<VerticalCarouselProps, VerticalCarousel
     super(props);
     this.state = {
       index: 0,
-      goToSlide: null,
-      prevPropsGoToSlide: 0,
-      newSlide: false,
     };
   }
 
-  componentDidMount = (): void => {
-    document.addEventListener("keydown", this.handleKeyDown);
-  };
+  shouldComponentUpdate(nextProps: VerticalCarouselProps, nextState: VerticalCarouselState) {
+    return (
+      this.props.slides !== nextProps.slides ||
+      this.props.goToSlide !== nextProps.goToSlide ||
+      this.props.showNavigation !== nextProps.showNavigation ||
+      this.props.offsetRadius !== nextProps.offsetRadius ||
+      this.props.animationConfig !== nextProps.animationConfig ||
+      this.state.index !== nextState.index
+    );
+  }
 
-  componentWillUnmount = (): void => {
-    document.removeEventListener("keydown", this.handleKeyDown);
-  };
+  modBySlidesLength(index: number): number {
+    const { slides } = this.props;
+    return ((index % slides.length) + slides.length) % slides.length;
+  }
 
-  handleKeyDown = (event: KeyboardEvent): void => {
-    if (event.isComposing || event.keyCode === 229) {
-      return;
-    }
-    if (event.keyCode === 38) {
-      this.moveSlide(-1);
-    }
-    if (event.keyCode === 40) {
-      this.moveSlide(1);
-    }
-  };
-
-  modBySlidesLength = (index: number): number => {
-    return mod(index, this.props.slides.length);
-  };
-
-  moveSlide = (direction: number): void => {
-    this.setState({
-      index: this.modBySlidesLength(this.state.index + direction),
-      goToSlide: null,
-    });
-  };
+  moveSlide(direction: number): void {
+    this.setState((prevState) => ({
+      index: this.modBySlidesLength(prevState.index + direction),
+    }));
+  }
 
   clampOffsetRadius(offsetRadius: number): number {
     const { slides } = this.props;
     const upperBound = Math.floor((slides.length - 1) / 2);
-
-    if (offsetRadius < 0) {
-      return 0;
-    }
-    if (offsetRadius > upperBound) {
-      return upperBound;
-    }
-
-    return offsetRadius;
+    return Math.max(0, Math.min(offsetRadius, upperBound));
   }
 
   getPresentableSlides(): Slide[] {
@@ -150,26 +82,26 @@ class VerticalCarousel extends Component<VerticalCarouselProps, VerticalCarousel
     let navigationButtons = null;
     if (showNavigation) {
       navigationButtons = (
-        <NavigationButtons>
-          <NavBtn onClick={() => this.moveSlide(1)}>&#8593;</NavBtn>
-          <NavBtn onClick={() => this.moveSlide(-1)}>&#8595;</NavBtn>
-        </NavigationButtons>
+        <div>
+          <button className="btn" onClick={() => this.moveSlide(1)}>&#8593;</button>
+          <button className="btn" onClick={() => this.moveSlide(-1)}>&#8595;</button>
+        </div>
       );
     }
+
     return (
       <>
-        <Wrapper>
+        <div className="relative flex justify-center w-[100%] h-[100%]">
           {this.getPresentableSlides().map((slide, presentableIndex) => (
             <Slide
               key={slide.key}
               content={slide.content}
-              moveSlide={this.moveSlide}
               offsetRadius={this.clampOffsetRadius(offsetRadius)}
               index={presentableIndex}
               animationConfig={animationConfig}
             />
           ))}
-        </Wrapper>
+        </div>
         {navigationButtons}
       </>
     );
@@ -177,3 +109,4 @@ class VerticalCarousel extends Component<VerticalCarouselProps, VerticalCarousel
 }
 
 export default VerticalCarousel;
+

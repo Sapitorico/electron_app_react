@@ -8,6 +8,7 @@ import sendImages from "@/components/websocket/socket";
 import Carousel from "./testeo/Carousel";
 import { setMessageCallback } from "@/components/websocket/socket";
 import { socket } from "@/components/websocket/socket";
+import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example"
 
 export default function Lessons({
   handleSelectTab,
@@ -147,59 +148,59 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
-        <ImgDisplay letter={currentGif} />
-        {/*<Carousel />*/}
+        {/*<ImgDisplay letter={currentGif} />*/}
+        <Example />
         <div className="divider divider-horizontal w-px h-full"></div>
-        <div className="flex flex-col items-center mx-auto">
-          <canvas
-            id="canvas"
-            width="640"
-            height="480"
-            className="hidden"
-          ></canvas>
-          <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
-            <video
-              id="video"
-              ref={videoRef}
-              autoPlay
-              className="w-max h-max"
-              style={{ transform: "scaleX(-1)" }}
-            ></video>
-          </div>
-          {isCameraOpen ? (
-            <button
-              className="btn btn-primary w-60 mt-3 mx-auto"
-              onClick={closeWebcam}
-            >
-              Cerrar Webcam
-            </button>
-          ) : (
-            <button
-              className="btn btn-primary w-full mt-3 mx-auto"
-              onClick={openWebcam}
-            >
-              Abrir Webcam
-            </button>
-          )}
-          {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
-            <dialog className="modal backgroundModal" open>
-              <form
-                method="dialog"
-                className="modal-box flex items-center flex-col h-52"
-              >
-                <label htmlFor="openCameraButton" className="m-8 font-medium">
-                  Cámara no conectada, por favor conecte una.
-                </label>
-                <button
-                  className="btn btn-warning mx-auto text-base"
-                  onClick={handleDialogClose}
-                >
-                  Cerrar
-                </button>
-              </form>
-            </dialog>
-          )}
-        </div>
+        {/*<div className="flex flex-col items-center mx-auto">*/}
+        {/*  <canvas*/}
+        {/*    id="canvas"*/}
+        {/*    width="640"*/}
+        {/*    height="480"*/}
+        {/*    className="hidden"*/}
+        {/*  ></canvas>*/}
+        {/*  <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">*/}
+        {/*    <video*/}
+        {/*      id="video"*/}
+        {/*      ref={videoRef}*/}
+        {/*      autoPlay*/}
+        {/*      className="w-max h-max"*/}
+        {/*      style={{ transform: "scaleX(-1)" }}*/}
+        {/*    ></video>*/}
+        {/*  </div>*/}
+        {/*  {isCameraOpen ? (*/}
+        {/*    <button*/}
+        {/*      className="btn btn-primary w-60 mt-3 mx-auto"*/}
+        {/*      onClick={closeWebcam}*/}
+        {/*    >*/}
+        {/*      Cerrar Webcam*/}
+        {/*    </button>*/}
+        {/*  ) : (*/}
+        {/*    <button*/}
+        {/*      className="btn btn-primary w-full mt-3 mx-auto"*/}
+        {/*      onClick={openWebcam}*/}
+        {/*    >*/}
+        {/*      Abrir Webcam*/}
+        {/*    </button>*/}
+        {/*  )}*/}
+        {/*  {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (*/}
+        {/*    <dialog className="modal backgroundModal" open>*/}
+        {/*      <form*/}
+        {/*        method="dialog"*/}
+        {/*        className="modal-box flex items-center flex-col h-52"*/}
+        {/*      >*/}
+        {/*        <label htmlFor="openCameraButton" className="m-8 font-medium">*/}
+        {/*          Cámara no conectada, por favor conecte una.*/}
+        {/*        </label>*/}
+        {/*        <button*/}
+        {/*          className="btn btn-warning mx-auto text-base"*/}
+        {/*          onClick={handleDialogClose}*/}
+        {/*        >*/}
+        {/*          Cerrar*/}
+        {/*        </button>*/}
+        {/*      </form>*/}
+        {/*    </dialog>*/}
+        {/*  )}*/}
+        {/*</div>*/}
       </div>
       <div className="divider"></div>
       <div className="w-full flex m-4">

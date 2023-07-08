@@ -34,31 +34,31 @@ const Carousel = () => {
   };
 
   return (
-    <div className="w-screen flex justify-centier">
-      <div className="relative w-full max-w-lg mx-auto flex justify-center flex-col">
-        {letters.map((item, index) => (
-          <div
-            className="carousel__item flex items-center absolute w-full px-12 opacity-0 filter will-change-transform"
-            style={{ animationDelay: `calc(3s * ${index - carouselPosition})` }}
-            key={index}
-          >
-            <div className="carousel__item-head">
-              {item[0]}
-            </div>
-            <div className="carousel__item-body">
-              <img src={item[1]} className="letter_image" alt="letters" />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center mt-4">
-        <button onClick={handleMoveUp} className="mr-2">
-          Mover hacia arriba
-        </button>
-        <button onClick={handleMoveDown}>
-          Mover hacia abajo
-        </button>
-      </div>
+      <div className="w-screen flex justify-centier">
+        <div className="relative w-full max-w-lg mx-auto flex justify-center flex-col">
+          {letters.map((item, index) => (
+              <div
+                  className="carousel__item flex items-center absolute w-full px-12 opacity-0 filter will-change-transform"
+                  style={{animationDelay: `calc(3s * ${index - carouselPosition})`}}
+                  key={index}
+              >
+                <div className="carousel__item-head">
+                  {item[0]}
+                </div>
+                <div className="carousel__item-body">
+                  <img src={item[1]} className="letter_image" alt="letters"/>
+                </div>
+              </div>
+          ))}
+        </div>
+      {/*<div className="flex justify-center mt-4">*/}
+      {/*  <button onClick={handleMoveUp} className="mr-2">*/}
+      {/*    Mover hacia arriba*/}
+      {/*  </button>*/}
+      {/*  <button onClick={handleMoveDown}>*/}
+      {/*    Mover hacia abajo*/}
+      {/*  </button>*/}
+      {/*</div>*/}
     </div>
   );
 };

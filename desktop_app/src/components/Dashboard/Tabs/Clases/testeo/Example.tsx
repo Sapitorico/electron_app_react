@@ -1,45 +1,48 @@
 import React, { Component } from "react";
 import VerticalCarousel from "./vertical";
-// import uuddidv4 from "uuid";
 import { config } from "react-spring";
 
 interface Slide {
-  key: number;
-  content: string;
+  key: string;
+  content: React.ReactNode;
 }
 
 const slides: Slide[] = [
   {
-    key: 1,
-    content: "1",
+    key: "A",
+    content: <img src="src/data/image/A.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide A" key="A"/>,
   },
   {
-    key: 2,
-    content: "2",
+    key: "B",
+    content: <img src="src/data/image/B.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide B" key="B"/>,
   },
   {
-    key: 3,
-    content: "2",
+    key: "C",
+    content: <img src="src/data/image/C.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide C" key="C"/>,
   },
   {
-    key: 4,
-    content: "3",
+    key: "D",
+    content: <img src="src/data/image/D.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide D" key="D"/>,
   },
   {
-    key: 5,
-    content: "4",
+    key: "E",
+    content: <img src="src/data/image/E.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide E" key="E"/>,
   },
   {
-    key: 6,
-    content: "5",
+    key: "F",
+    content: <img src="src/data/image/F.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide F" key="F"/>,
   },
   {
-    key: 7,
-    content: "6",
+    key: "G",
+    content: <img src="src/data/image/G.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide G" key="G"/>,
   },
   {
-    key: 8,
-    content: "7",
+    key: "H",
+    content: <img src="src/data/image/H.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide H" key="H"/>,
+  },
+  {
+    key: "I",
+    content: <img src="src/data/image/I.jpg" className="w-[100%] ml-auto mr-auto" alt="Slide I" key="I"/>,
   },
 ];
 
@@ -56,24 +59,9 @@ export default class Example extends Component<{}, ExampleState> {
     config: config.gentle,
   };
 
-  // onChangeInput = e => {
-  //   this.setState({
-  //     [e.target.name]: parseInt(e.target.value, 10) || 0
-  //   });
-  // };
-
   render() {
     return (
-      <div
-        style={{
-          // position: "fixed",
-          // display: "flex",
-          flexDirection: "column",
-          width: "20vw",
-          height: "50vh",
-          margin: "0 auto",
-        }}
-      >
+      <div className="w-[50%] h-[50%] m-auto">
         <VerticalCarousel
           slides={slides}
           offsetRadius={this.state.offsetRadius}
@@ -84,3 +72,4 @@ export default class Example extends Component<{}, ExampleState> {
     );
   }
 }
+
