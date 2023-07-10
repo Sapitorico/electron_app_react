@@ -3,9 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { dominantHandType, fullScreenType } from "@/types/dataTypes";
 import { selectedTabType } from "@/types/dataTypes";
-import ImgDisplay from "./ImgComp";
 import sendImages from "@/components/websocket/socket";
-import Carousel from "./testeo/Carousel";
 import { setMessageCallback } from "@/components/websocket/socket";
 import { socket } from "@/components/websocket/socket";
 import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example"
@@ -21,12 +19,17 @@ export default function Lessons({
   setFullScreen: (value: fullScreenType) => void;
   dominantHand: dominantHandType;
 }) {
-  const [isCameraOpen, setCameraOpen] = useState(false);
-  const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false);
-  const [isCameraAvailable, setIsCameraAvailable] = useState(false);
-  const [currentGif, setCurrentGif] = useState("A");
+  // Variables de estado
+  const [isCameraOpen, setCameraOpen] = useState(false); // Bandera para el estado de la cámara abierta
+  const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false); // Bandera para intentar abrir la cámara
+  const [isCameraAvailable, setIsCameraAvailable] = useState(false); // Bandera para la disponibilidad de la cámara
+  const [currentGif, setCurrentGif] = useState("A"); // Identificador del GIF actual
+  const [message, setMessage] = useState(""); // Variable de estado para almacenar el valor de 'message'
 
+  // Referencia al elemento de video
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // ID de intervalo para capturar fotogramas del flujo de video
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,6 +39,7 @@ export default function Lessons({
     checkCameraAvailability();
   }, []);
 
+  // Verificar si la cámara está disponible
   const checkCameraAvailability = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -43,10 +47,11 @@ export default function Lessons({
       setIsCameraAvailable(hasCamera);
     } catch (error) {
       setIsCameraAvailable(false);
-      console.error("Error checking camera availability:", error);
+      console.error("Error al verificar la disponibilidad de la cámara:", error);
     }
   };
 
+  // Abrir la webcam y comenzar a capturar fotogramas
   const openWebcam = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -59,12 +64,15 @@ export default function Lessons({
     } catch (error) {
       setIsTryingToOpenCamera(true);
       setIsCameraAvailable(false);
-      console.error("Error opening webcam:", error);
+      console.error("Error al abrir la webcam:", error);
     }
   };
 
+  // Obtener fotogramas del flujo de video a un intervalo fijo
   const obtainfps = (video: HTMLVideoElement | null) => {
     if (video) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       intervalId = setInterval(() => {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
@@ -76,6 +84,8 @@ export default function Lessons({
       }, 200);
     }
   };
+
+  // Cerrar la webcam y detener la captura de fotogramas
   const closeWebcam = () => {
     for (let i = 0; i <= 20; i++) {
       clearInterval(i);
@@ -95,22 +105,26 @@ export default function Lessons({
     }
   };
 
+  // Cerrar el diálogo de la cámara
   const handleDialogClose = () => {
     setIsTryingToOpenCamera(false);
   };
 
+  // Manejar el siguiente GIF
   const handleNextGif = () => {
     const incrementedCharCode = currentGif.charCodeAt(0) + 1;
     const incrementedStr = String.fromCharCode(incrementedCharCode);
     setCurrentGif(incrementedStr);
   };
 
+  // Función de devolución de llamada para manejar mensajes entrantes desde el socket
   const getMessage = (message: string) => {
     console.log(message);
-    if (message === "Next") {
-      handleNextGif();
-    }
-  };
+  setMessage(message);
+  if (message === "Next") {
+    handleNextGif();
+  }
+};
 
   useEffect(() => {
     setMessageCallback(getMessage);
@@ -148,59 +162,58 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
-        {/*<ImgDisplay letter={currentGif} />*/}
-        <Example />
+        <Example message={message} />
         <div className="divider divider-horizontal w-px h-full"></div>
-        {/*<div className="flex flex-col items-center mx-auto">*/}
-        {/*  <canvas*/}
-        {/*    id="canvas"*/}
-        {/*    width="640"*/}
-        {/*    height="480"*/}
-        {/*    className="hidden"*/}
-        {/*  ></canvas>*/}
-        {/*  <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">*/}
-        {/*    <video*/}
-        {/*      id="video"*/}
-        {/*      ref={videoRef}*/}
-        {/*      autoPlay*/}
-        {/*      className="w-max h-max"*/}
-        {/*      style={{ transform: "scaleX(-1)" }}*/}
-        {/*    ></video>*/}
-        {/*  </div>*/}
-        {/*  {isCameraOpen ? (*/}
-        {/*    <button*/}
-        {/*      className="btn btn-primary w-60 mt-3 mx-auto"*/}
-        {/*      onClick={closeWebcam}*/}
-        {/*    >*/}
-        {/*      Cerrar Webcam*/}
-        {/*    </button>*/}
-        {/*  ) : (*/}
-        {/*    <button*/}
-        {/*      className="btn btn-primary w-full mt-3 mx-auto"*/}
-        {/*      onClick={openWebcam}*/}
-        {/*    >*/}
-        {/*      Abrir Webcam*/}
-        {/*    </button>*/}
-        {/*  )}*/}
-        {/*  {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (*/}
-        {/*    <dialog className="modal backgroundModal" open>*/}
-        {/*      <form*/}
-        {/*        method="dialog"*/}
-        {/*        className="modal-box flex items-center flex-col h-52"*/}
-        {/*      >*/}
-        {/*        <label htmlFor="openCameraButton" className="m-8 font-medium">*/}
-        {/*          Cámara no conectada, por favor conecte una.*/}
-        {/*        </label>*/}
-        {/*        <button*/}
-        {/*          className="btn btn-warning mx-auto text-base"*/}
-        {/*          onClick={handleDialogClose}*/}
-        {/*        >*/}
-        {/*          Cerrar*/}
-        {/*        </button>*/}
-        {/*      </form>*/}
-        {/*    </dialog>*/}
-        {/*  )}*/}
-        {/*</div>*/}
+        <div className="flex flex-col items-center mx-auto">
+          <canvas
+            id="canvas"
+            width="640"
+            height="480"
+            className="hidden"
+          ></canvas>
+          <div className="grid bg-base-200 justify-center rounded-box overflow-hidden">
+            <video
+              id="video"
+              ref={videoRef}
+              autoPlay
+              className="w-max h-max"
+              style={{ transform: "scaleX(-1)" }}
+            ></video>
+          </div>
+          {isCameraOpen ? (
+            <button
+              className="btn btn-primary w-60 mt-3 mx-auto"
+              onClick={closeWebcam}
+            >
+              Cerrar Webcam
+            </button>
+          ) : (
+            <button
+              className="btn btn-primary w-full mt-3 mx-auto"
+              onClick={openWebcam}
+            >
+              Abrir Webcam
+            </button>
+          )}
+          {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
+            <dialog className="modal backgroundModal" open>
+                           <form
+                method="dialog"
+                className="modal-box flex items-center flex-col h-52"
+              >
+                <label htmlFor="openCameraButton" className="m-8 font-medium">
+                  Cámara no conectada, por favor conecte una.
+                </label>
+                <button
+                  className="btn btn-warning mx-auto text-base"
+                  onClick={handleDialogClose}
+                >
+                  Cerrar
+                </button>
+              </form>
+            </dialog>
+          )}
+        </div>
       </div>
       <div className="divider"></div>
       <div className="w-full flex m-4">
@@ -214,3 +227,4 @@ export default function Lessons({
     </div>
   );
 }
+

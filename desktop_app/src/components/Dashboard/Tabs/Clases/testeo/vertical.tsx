@@ -1,112 +1,166 @@
-import React from "react";
-import Slide from "./Slide";
+import React, { useEffect, useState } from "react";
+import { Spring, animated } from "react-spring";
 
+// Componente de contenedor del slide
+const SlideContainer = animated.div;
+
+// Definir la interfaz para Slide
 interface Slide {
   key: string;
-  content: React.ReactNode;
+  content: string;
 }
 
+// Definir la interfaz para VerticalCarouselProps
 interface VerticalCarouselProps {
-  slides: Slide[];
-  goToSlide?: number;
-  showNavigation?: boolean;
-  offsetRadius?: number;
-  animationConfig?: {
-    tension: number;
-    friction: number;
-  };
+  slides: Slide[]; // Arreglo de objetos Slide
+  showNavigation: boolean; // Booleano para mostrar o no la navegación
+  offsetRadius: number; // Radio de desplazamiento
+  letter: string;
 }
 
-interface VerticalCarouselState {
-  index: number;
-}
+const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
+  slides,
+  showNavigation,
+  offsetRadius,
+  letter,
+}) => {
+  const [index, setIndex] = useState(0);
 
-class VerticalCarousel extends React.Component<VerticalCarouselProps, VerticalCarouselState> {
-  static defaultProps = {
-    offsetRadius: 1,
-    animationConfig: { tension: 120, friction: 14 },
-  };
-
-  constructor(props: VerticalCarouselProps) {
-    super(props);
-    this.state = {
-      index: 0,
-    };
+useEffect(() => {
+  const currentIndex = slides.findIndex((slide) => slide.key === letter);
+  const currentOffsetFromMiddle = currentIndex - index;
+  console.log("currentIndex", currentIndex);
+  console.log("index", index);
+  if (currentIndex !== -1 && currentOffsetFromMiddle === 0) {
+    const nextIndex = 1;
+    moveSlide(nextIndex);
   }
+}, [letter]);
 
-  shouldComponentUpdate(nextProps: VerticalCarouselProps, nextState: VerticalCarouselState) {
-    return (
-      this.props.slides !== nextProps.slides ||
-      this.props.goToSlide !== nextProps.goToSlide ||
-      this.props.showNavigation !== nextProps.showNavigation ||
-      this.props.offsetRadius !== nextProps.offsetRadius ||
-      this.props.animationConfig !== nextProps.animationConfig ||
-      this.state.index !== nextState.index
-    );
-  }
-
-  modBySlidesLength(index: number): number {
-    const { slides } = this.props;
+  // Función para calcular el módulo del índice con respecto a la longitud de los slides
+  const modBySlidesLength = (index: number): number => {
     return ((index % slides.length) + slides.length) % slides.length;
-  }
+  };
 
-  moveSlide(direction: number): void {
-    this.setState((prevState) => ({
-      index: this.modBySlidesLength(prevState.index + direction),
-    }));
-  }
+  // Función para mover el slide en una dirección dada
+  const moveSlide = (direction: number): void => {
+    setIndex((prevIndex) => modBySlidesLength(prevIndex + direction));
+  };
 
-  clampOffsetRadius(offsetRadius: number): number {
-    const { slides } = this.props;
+  // Función para acotar el radio de desplazamiento dentro de los límites válidos
+  const clampOffsetRadius = (offsetRadius: number): number => {
     const upperBound = Math.floor((slides.length - 1) / 2);
     return Math.max(0, Math.min(offsetRadius, upperBound));
-  }
+  };
 
-  getPresentableSlides(): Slide[] {
-    const { slides } = this.props;
-    const { index } = this.state;
-    let { offsetRadius } = this.props;
-    offsetRadius = this.clampOffsetRadius(offsetRadius);
+  // Función para obtener los slides presentables según el índice actual y el radio de desplazamiento
+  const getPresentableSlides = (): Slide[] => {
+    const offset = clampOffsetRadius(offsetRadius);
     const presentableSlides: Slide[] = [];
 
-    for (let i = -offsetRadius; i < 1 + offsetRadius; i++) {
-      presentableSlides.push(slides[this.modBySlidesLength(index + i)]);
+    for (let i = -offset; i <= offset; i++) {
+      presentableSlides.push(slides[modBySlidesLength(index + i)]);
     }
 
     return presentableSlides;
-  }
+  };
 
-  render() {
-    const { animationConfig, offsetRadius, showNavigation } = this.props;
+  // Crear los botones de navegación si showNavigation es verdadero
+  const navigationButtons = showNavigation ? (
+    <div>
+      <button className="btn" onClick={() => moveSlide(1)}>
+        &#8593;
+      </button>
+      <button className="btn" onClick={() => moveSlide(-1)}>
+        &#8595;
+      </button>
+    </div>
+  ) : null;
 
-    let navigationButtons = null;
-    if (showNavigation) {
-      navigationButtons = (
-        <div>
-          <button className="btn" onClick={() => this.moveSlide(1)}>&#8593;</button>
-          <button className="btn" onClick={() => this.moveSlide(-1)}>&#8595;</button>
-        </div>
-      );
-    }
+  return (
+    <>
+      <div className="relative flex justify-center w-[100%] h-[100%]">
+        {/* Renderizar los slides presentables */}
+        {getPresentableSlides().map((slide, presentableIndex) => {
+          // Calcula el desplazamiento desde el centro del slide
+          const offsetFromMiddle = presentableIndex - offsetRadius;
 
-    return (
-      <>
-        <div className="relative flex justify-center w-[100%] h-[100%]">
-          {this.getPresentableSlides().map((slide, presentableIndex) => (
-            <Slide
+          // Calcula el número total de elementos presentables en el slide
+          const totalPresentables = 2 * offsetRadius + 1;
+
+          // Calcula el factor de distancia basado en la posición del slide
+          const distanceFactor = 1 - Math.abs(offsetFromMiddle / offsetRadius);
+
+          // Calcula el desplazamiento vertical (translateY) del slide
+          const translateYoffset = 50 * (Math.abs(offsetFromMiddle) / (offsetRadius + 1));
+          let translateY = -50;
+
+          // Ajusta el desplazamiento vertical si el offsetRadius no es cero
+          if (offsetRadius !== 0) {
+            if (presentableIndex === 0) {
+              translateY = 0;
+            } else if (presentableIndex === totalPresentables - 1) {
+              translateY = -50;
+            }
+          }
+
+          // Aplica el desplazamiento vertical adicional según la posición del slide
+          if (offsetFromMiddle > 0) {
+            translateY += translateYoffset;
+          } else if (offsetFromMiddle < 0) {
+            translateY -= translateYoffset;
+          }
+
+          return (
+            <Spring
               key={slide.key}
-              content={slide.content}
-              offsetRadius={this.clampOffsetRadius(offsetRadius)}
-              index={presentableIndex}
-              animationConfig={animationConfig}
-            />
-          ))}
-        </div>
-        {navigationButtons}
-      </>
-    );
-  }
-}
+              to={{
+                transform: `translateX(0%) translateY(${translateY}%) scale(${distanceFactor})`,
+                top: `${offsetRadius === 0 ? 50 : 50 + (offsetFromMiddle * 50) / offsetRadius}%`,
+                opacity: offsetFromMiddle === 0 ? 1 : 0, // Establece opacidad en 1 para el elemento principal, 0 para los demás
+              }}
+            >
+              {(style) => (
+                <SlideContainer
+                  // Clase del contenedor del slide
+                  className="absolute h-[100%] top-[50%] flex items-center justify-center origin-[50%_50%]"
+                  style={{
+                    ...style,
+                    zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2),
+                  }}
+                >
+                  <div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">
+                    {/* Nombre del slide extraído del contenido */}
+                    {slide.key}
+                  </div>
+                  <div className={"w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"}>
+                    {/* Imagen del slide */}
+                    {offsetFromMiddle === 0 ? (
+                      // Reproduce el GIF solo para el elemento principal que sea un GIF
+                      <img src={slide.content} className="w-[100%] ml-auto mr-auto" alt="Gift" />
+                    ) : (
+                      // Muestra solo la imagen estática para los demás elementos o los elementos principales que no sean un GIF
+                      <img src={""} alt="" />
+                    )}
+                  </div>
+                  {/*<div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">*/}
+                  {/*  /!* Nombre del slide extraído del contenido *!/*/}
+                  {/*  {slide.key}*/}
+                  {/*</div>*/}
+                  {/*<div className="w-[50%] bg-white rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]">*/}
+                  {/*  /!* Imagen del slide *!/*/}
+                  {/*  <img src={slide.content} className="w-[100%] ml-auto mr-auto" alt="Slide A" />*/}
+                  {/*</div>*/}
+                </SlideContainer>
+              )}
+            </Spring>
+          );
+        })}
+      </div>
+      {navigationButtons}
+    </>
+  );
+};
 
 export default VerticalCarousel;
 
