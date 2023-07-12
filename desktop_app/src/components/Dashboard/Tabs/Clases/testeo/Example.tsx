@@ -15,6 +15,8 @@ interface ExampleProps {
   type: whatRender;
   changeSlide: string;
   setChange: (value: string) => void;
+  currentStep: string;
+  setCurrentStep: (value: string) => void;
 }
 
 function processGiftSlides({
@@ -69,7 +71,14 @@ class Example extends Component<ExampleProps, ExampleState> {
   };
   render() {
     const { offsetRadius, showNavigation } = this.state;
-    const { buttonclicked, type, changeSlide, setChange } = this.props;
+    const {
+      buttonclicked,
+      type,
+      changeSlide,
+      setChange,
+      currentStep,
+      setCurrentStep,
+    } = this.props;
     const giftSlides1 = processGiftSlides({ buttonclicked, type });
     const slides: Slide[] = [...giftSlides1];
 
@@ -81,6 +90,8 @@ class Example extends Component<ExampleProps, ExampleState> {
           showNavigation={showNavigation}
           changeSlide={changeSlide}
           setChange={setChange}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
         />
       </div>
     );

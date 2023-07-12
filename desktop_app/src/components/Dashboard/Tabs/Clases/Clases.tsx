@@ -7,7 +7,6 @@ import sendImages from "@/components/websocket/socket";
 import { setMessageCallback } from "@/components/websocket/socket";
 import { socket } from "@/components/websocket/socket";
 import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example";
-import { whatRender } from "@/types/dataTypes";
 
 export default function Lessons({
   handleSelectTab,
@@ -138,7 +137,10 @@ export default function Lessons({
       if (currentkey === buttonclicked[1]) {
         setCurrentkey(buttonclicked[0]);
         if (currentStep === "1") {
-          setCurrentStep("2");
+          setChange("YES");
+          setTimeout(() => {
+            setCurrentStep("2");
+          }, 400);
         }
       } else setChange("YES");
     } else {
@@ -154,15 +156,19 @@ export default function Lessons({
   const getMessage = (message: string) => {
     console.log(message);
     if (currentStep === "1" && message === "Next") {
-      handleNextSlide();
+      console.log(currentkey);
+      if (currentStep === "1") {
+        handleNextSlide();
+      }
     } else if (currentStep === "2" && message === currentkey) {
+      console.log(currentkey);
       handleNextSlide();
     }
   };
 
   useEffect(() => {
     setMessageCallback(getMessage);
-  }, [currentkey]);
+  }, [currentkey, currentStep]);
 
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
@@ -202,6 +208,8 @@ export default function Lessons({
             type={"gifts"}
             changeSlide={changeSlide}
             setChange={setChange}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
           />
         )}
         {currentStep === "2" && (
@@ -210,6 +218,8 @@ export default function Lessons({
             type={"image"}
             changeSlide={changeSlide}
             setChange={setChange}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
           />
         )}
         <div className="divider divider-horizontal w-px h-full"></div>

@@ -18,6 +18,8 @@ interface VerticalCarouselProps {
   offsetRadius: number; // Radio de desplazamiento
   changeSlide: string;
   setChange: (value: string) => void;
+  currentStep: string;
+  setCurrentStep: (value: string) => void;
 }
 
 const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
@@ -26,13 +28,17 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
   offsetRadius,
   changeSlide,
   setChange,
+  currentStep,
+  setCurrentStep,
 }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (changeSlide === "YES") {
-      moveSlide(1);
-      setChange("NO");
+      setTimeout(() => {
+        moveSlide(1);
+        setChange("NO");
+      }, 250);
     }
   }, [changeSlide]);
 
@@ -124,6 +130,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
             <Spring
               key={slide.key}
               to={{
+                width: changeSlide === "YES" ? "0%" : "100%",
                 transform: `translateX(0%) translateY(${translateY}%) scale(${distanceFactor})`,
                 top: `${
                   offsetRadius === 0
@@ -142,13 +149,15 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
                     zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2),
                   }}
                 >
-                  <div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">
+                  <div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black ">
                     {/* Nombre del slide extraído del contenido */}
                     {slide.key}
                   </div>
                   <div
                     className={
-                      "w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"
+                      changeSlide === "YES"
+                        ? "w-[100%] bg-green-500 rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px] transition-transform duration-1000 ease-in-out"
+                        : "w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"
                     }
                   >
                     {/* Imagen del slide */}
@@ -164,6 +173,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
                       <img src={""} alt="" />
                     )}
                   </div>
+
                   {/*<div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">*/}
                   {/*  /!* Nombre del slide extraído del contenido *!/*/}
                   {/*  {slide.key}*/}
