@@ -1,30 +1,34 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React, { useState, useRef, useEffect } from "react";
-import { dominantHandType, fullScreenType } from "@/types/dataTypes";
+import { buttype, dominantHandType, fullScreenType } from "@/types/dataTypes";
 import { selectedTabType } from "@/types/dataTypes";
 import sendImages from "@/components/websocket/socket";
 import { setMessageCallback } from "@/components/websocket/socket";
 import { socket } from "@/components/websocket/socket";
-import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example"
+import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example";
+import { whatRender } from "@/types/dataTypes";
 
 export default function Lessons({
   handleSelectTab,
   WichEndPoint,
   setFullScreen,
   dominantHand,
+  buttonclicked,
 }: {
+  buttonclicked: buttype;
   handleSelectTab: (value: selectedTabType) => void;
   WichEndPoint: number;
   setFullScreen: (value: fullScreenType) => void;
   dominantHand: dominantHandType;
 }) {
   // Variables de estado
+  const [currentStep, setCurrentStep] = useState("1");
   const [isCameraOpen, setCameraOpen] = useState(false); // Bandera para el estado de la cámara abierta
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false); // Bandera para intentar abrir la cámara
   const [isCameraAvailable, setIsCameraAvailable] = useState(false); // Bandera para la disponibilidad de la cámara
-  const [currentGif, setCurrentGif] = useState("A"); // Identificador del GIF actual
-  const [message, setMessage] = useState(""); // Variable de estado para almacenar el valor de 'message'
+  const [currentkey, setCurrentkey] = useState(buttonclicked[0]); // Identificador del Key actual
+  const [changeSlide, setChange] = useState("NO");
 
   // Referencia al elemento de video
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -47,7 +51,10 @@ export default function Lessons({
       setIsCameraAvailable(hasCamera);
     } catch (error) {
       setIsCameraAvailable(false);
-      console.error("Error al verificar la disponibilidad de la cámara:", error);
+      console.error(
+        "Error al verificar la disponibilidad de la cámara:",
+        error
+      );
     }
   };
 
@@ -110,25 +117,47 @@ export default function Lessons({
     setIsTryingToOpenCamera(false);
   };
 
-  // Manejar el siguiente GIF
-  const handleNextGif = () => {
-    const incrementedCharCode = currentGif.charCodeAt(0) + 1;
-    const incrementedStr = String.fromCharCode(incrementedCharCode);
-    setCurrentGif(incrementedStr);
+  // Manejar el siguiente Slide
+  const handleNextSlide = () => {
+    let check = false;
+    if (currentkey === "Ñ") {
+      check = true;
+      console.log("hola");
+      setCurrentkey("O");
+    } else {
+      const incrementedCharCode = currentkey.charCodeAt(0) + 1;
+      const incrementedStr = String.fromCharCode(incrementedCharCode);
+      setCurrentkey(incrementedStr);
+    }
+    if (currentkey === "N") {
+      if (check !== true) {
+        setCurrentkey("Ñ");
+      }
+    }
+    if (currentkey === buttonclicked[1]) {
+      setCurrentkey(buttonclicked[0]);
+      if (currentStep === "1") {
+        setCurrentStep("2");
+      }
+    } else {
+      console.log(currentkey);
+      setChange("YES");
+    }
   };
 
   // Función de devolución de llamada para manejar mensajes entrantes desde el socket
   const getMessage = (message: string) => {
     console.log(message);
-  setMessage(message);
-  if (message === "Next") {
-    handleNextGif();
-  }
-};
+    if (currentStep === "1" && message === "Next") {
+      handleNextSlide();
+    } else if (currentStep === "2" && message === currentkey) {
+      handleNextSlide();
+    }
+  };
 
   useEffect(() => {
     setMessageCallback(getMessage);
-  }, [currentGif]);
+  }, [currentkey]);
 
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
@@ -162,7 +191,22 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
-        <Example message={message} />
+        {currentStep === "1" && (
+          <Example
+            buttonclicked={buttonclicked}
+            type={"gifts"}
+            changeSlide={changeSlide}
+            setChange={setChange}
+          />
+        )}
+        {currentStep === "2" && (
+          <Example
+            buttonclicked={buttonclicked}
+            type={"image"}
+            changeSlide={changeSlide}
+            setChange={setChange}
+          />
+        )}
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">
           <canvas
@@ -197,7 +241,7 @@ export default function Lessons({
           )}
           {!isCameraOpen && isTryingToOpenCamera && !isCameraAvailable && (
             <dialog className="modal backgroundModal" open>
-                           <form
+              <form
                 method="dialog"
                 className="modal-box flex items-center flex-col h-52"
               >
@@ -219,7 +263,7 @@ export default function Lessons({
       <div className="w-full flex m-4">
         <button
           className="btn btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
-          onClick={handleNextGif}
+          onClick={handleNextSlide}
         >
           Next Gif
         </button>
@@ -227,4 +271,3 @@ export default function Lessons({
     </div>
   );
 }
-

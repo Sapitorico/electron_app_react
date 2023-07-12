@@ -1,12 +1,15 @@
 import { selectedTabType } from "@/types/dataTypes";
 import { fullScreenType } from "@/types/dataTypes";
+import { buttype } from "@/types/dataTypes";
 
 export default function Education({
   handleSelectTab,
   setFullScreen,
+  setbut,
 }: {
   handleSelectTab: (value: selectedTabType) => void;
   setFullScreen: (value: fullScreenType) => void;
+  setbut: (value: buttype) => void;
 }) {
   return (
     <div className="mainContainer flex h-full w-full justify-center">
@@ -24,6 +27,7 @@ export default function Education({
                     onClick={() => {
                       setFullScreen("yes");
                       handleSelectTab("clasesLetras");
+                      setbut("AI");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >
@@ -33,6 +37,7 @@ export default function Education({
                     onClick={() => {
                       setFullScreen("yes");
                       handleSelectTab("clasesLetras");
+                      setbut("JQ");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >
@@ -42,6 +47,7 @@ export default function Education({
                     onClick={() => {
                       setFullScreen("yes");
                       handleSelectTab("clasesLetras");
+                      setbut("RZ");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >
@@ -58,6 +64,7 @@ export default function Education({
                     onClick={() => {
                       setFullScreen("yes");
                       handleSelectTab("clasesNumeros");
+                      setbut("NUM");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >

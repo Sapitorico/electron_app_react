@@ -30,7 +30,7 @@ const letter_gifList = {
   L: "/src/data/gifts/L.gif",
   M: "/src/data/gifts/M.gif",
   N: "/src/data/gifts/N.gif",
-  "Ñ": "/src/data/gifts/Ñ.gif",
+  Ñ: "/src/data/gifts/Ñ.gif",
   O: "/src/data/gifts/O.gif",
   P: "/src/data/gifts/P.gif",
   Q: "/src/data/gifts/Q.gif",
@@ -46,9 +46,33 @@ const letter_gifList = {
 };
 
 const alphabet_arr = [
-  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-  "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S",
-  "T", "U", "V", "W", "X", "Y", "Z",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "Ñ",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
 ];
 
 const number_arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -82,7 +106,10 @@ export default function Glossary() {
             />
           </div>
           <div className="modal-action">
-            <button className="btn btn-warning mx-auto text-base" onClick={closeDialog}>
+            <button
+              className="btn btn-warning mx-auto text-base"
+              onClick={closeDialog}
+            >
               Cerrar
             </button>
           </div>
@@ -97,9 +124,9 @@ export default function Glossary() {
         <h1 className="m-5 text-2xl font-bold">Alfabeto</h1>
         <div className="flex flex-wrap gap-5 m-5">
           {alphabet_arr.map((letter, index) => (
-            <div className="card" key={index}>
+            <div className="card">
               <button
-                className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
+                className="glosaryCard card card-body  shadow-2xl text-4xl font-semibold"
                 onClick={() => openDialog(index, "letter")}
               >
                 {letter}
@@ -110,9 +137,9 @@ export default function Glossary() {
         <h1 className="m-5 text-2xl font-bold">Números</h1>
         <div className="flex flex-wrap gap-5 m-5">
           {number_arr.map((number, index) => (
-            <div className="glosaryCardBody card" key={index}>
+            <div className="glosaryCardBody card">
               <button
-                className="glosaryCard card card-body glass shadow-xl text-4xl font-semibold"
+                className="glosaryCard card card-body shadow-xl text-4xl font-semibold"
                 onClick={() => openDialog(index, "number")}
               >
                 {number}

@@ -10,13 +10,14 @@ import Bubbles from "./bubbleAnimation";
 import { dominantHandType } from "@/types/dataTypes";
 import { fullScreenType } from "@/types/dataTypes";
 import PracticeMenu from "./Dashboard/Tabs/Practice/Practice";
+import { buttype } from "@/types/dataTypes";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
   const handleSelectTab = (value: selectedTabType) => {
     setSelectedTab(value);
   };
-
+  const [buttonclicked, setbut] = useState<buttype>("AI");
   const [dominantHand, setDominantHand] = useState<dominantHandType>("Right");
   const [fullscreen, setFullScreen] = useState<fullScreenType>("no");
 
@@ -37,6 +38,7 @@ function App() {
               {selectedTab === "home" && <HomePage />}
               {selectedTab === "educacion" && (
                 <Education
+                  setbut={setbut}
                   handleSelectTab={handleSelectTab}
                   setFullScreen={setFullScreen}
                 />
@@ -62,6 +64,7 @@ function App() {
                 WichEndPoint={0}
                 setFullScreen={setFullScreen}
                 dominantHand={dominantHand}
+                buttonclicked={buttonclicked}
               />
             )}
             {selectedTab === "clasesNumeros" && (
@@ -70,6 +73,7 @@ function App() {
                 WichEndPoint={1}
                 setFullScreen={setFullScreen}
                 dominantHand={dominantHand}
+                buttonclicked={buttonclicked}
               />
             )}
           </div>

@@ -1,3 +1,4 @@
+import { whatRender } from "@/types/dataTypes";
 import React, { useEffect, useState } from "react";
 import { Spring, animated } from "react-spring";
 
@@ -15,27 +16,34 @@ interface VerticalCarouselProps {
   slides: Slide[]; // Arreglo de objetos Slide
   showNavigation: boolean; // Booleano para mostrar o no la navegación
   offsetRadius: number; // Radio de desplazamiento
-  letter: string;
+  changeSlide: string;
+  setChange: (value: string) => void;
 }
 
 const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
   slides,
   showNavigation,
   offsetRadius,
-  letter,
+  changeSlide,
+  setChange,
 }) => {
   const [index, setIndex] = useState(0);
 
-useEffect(() => {
-  const currentIndex = slides.findIndex((slide) => slide.key === letter);
-  const currentOffsetFromMiddle = currentIndex - index;
-  console.log("currentIndex", currentIndex);
-  console.log("index", index);
-  if (currentIndex !== -1 && currentOffsetFromMiddle === 0) {
-    const nextIndex = 1;
-    moveSlide(nextIndex);
-  }
-}, [letter]);
+  useEffect(() => {
+    if (changeSlide === "YES") {
+      moveSlide(1);
+      setChange("NO");
+    }
+  }, [changeSlide]);
+
+  // useEffect(() => {
+  // const currentIndex = slides.findIndex((slide) => slide.key === letter);
+  // const currentOffsetFromMiddle = currentIndex - index;
+  // if (currentIndex !== -1 && currentOffsetFromMiddle === 0) {
+  //  const nextIndex = 1;
+  // moveSlide(nextIndex);
+  // }
+  // }, [letter]);
 
   // Función para calcular el módulo del índice con respecto a la longitud de los slides
   const modBySlidesLength = (index: number): number => {
@@ -92,7 +100,8 @@ useEffect(() => {
           const distanceFactor = 1 - Math.abs(offsetFromMiddle / offsetRadius);
 
           // Calcula el desplazamiento vertical (translateY) del slide
-          const translateYoffset = 50 * (Math.abs(offsetFromMiddle) / (offsetRadius + 1));
+          const translateYoffset =
+            50 * (Math.abs(offsetFromMiddle) / (offsetRadius + 1));
           let translateY = -50;
 
           // Ajusta el desplazamiento vertical si el offsetRadius no es cero
@@ -116,7 +125,11 @@ useEffect(() => {
               key={slide.key}
               to={{
                 transform: `translateX(0%) translateY(${translateY}%) scale(${distanceFactor})`,
-                top: `${offsetRadius === 0 ? 50 : 50 + (offsetFromMiddle * 50) / offsetRadius}%`,
+                top: `${
+                  offsetRadius === 0
+                    ? 50
+                    : 50 + (offsetFromMiddle * 50) / offsetRadius
+                }%`,
                 opacity: offsetFromMiddle === 0 ? 1 : 0, // Establece opacidad en 1 para el elemento principal, 0 para los demás
               }}
             >
@@ -133,11 +146,19 @@ useEffect(() => {
                     {/* Nombre del slide extraído del contenido */}
                     {slide.key}
                   </div>
-                  <div className={"w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"}>
+                  <div
+                    className={
+                      "w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"
+                    }
+                  >
                     {/* Imagen del slide */}
                     {offsetFromMiddle === 0 ? (
                       // Reproduce el GIF solo para el elemento principal que sea un GIF
-                      <img src={slide.content} className="w-[100%] ml-auto mr-auto" alt="Gift" />
+                      <img
+                        src={slide.content}
+                        className="w-[100%] ml-auto mr-auto"
+                        alt="Gift"
+                      />
                     ) : (
                       // Muestra solo la imagen estática para los demás elementos o los elementos principales que no sean un GIF
                       <img src={""} alt="" />
@@ -163,4 +184,3 @@ useEffect(() => {
 };
 
 export default VerticalCarousel;
-

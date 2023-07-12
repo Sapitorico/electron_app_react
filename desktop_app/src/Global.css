@@ -180,3 +180,7 @@
 .backgroundModal > form {
   box-shadow: 0px 0px 28px 4px #e9423c;
 }
+
+.back {
+  background-color: #010101
+}
