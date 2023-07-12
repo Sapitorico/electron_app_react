@@ -64,7 +64,7 @@ export default function Education({
                     onClick={() => {
                       setFullScreen("yes");
                       handleSelectTab("clasesNumeros");
-                      setbut("NUM");
+                      setbut("1");
                     }}
                     className="btn btn-primary w-96 font-bold text-xl"
                   >

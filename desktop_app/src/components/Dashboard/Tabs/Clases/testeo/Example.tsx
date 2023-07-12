@@ -22,18 +22,28 @@ function processGiftSlides({
   type,
 }: Pick<ExampleProps, "buttonclicked" | "type">): Slide[] {
   const giftSlides1: Slide[] = [];
-
-  let fst = buttonclicked.charCodeAt(0);
-  let sec = buttonclicked.charCodeAt(1);
+  let fst;
+  let sec;
   let key: string;
   let str: string;
+
+  if (buttonclicked.length === 1) {
+    fst = 1;
+    sec = 10;
+  } else {
+    fst = buttonclicked.charCodeAt(0);
+    sec = buttonclicked.charCodeAt(1);
+  }
 
   if (type === "image") {
     str = "jpg";
   } else str = "gif";
 
   for (let i = fst; i <= sec; i++) {
-    key = String.fromCharCode(i);
+    if (buttonclicked.length === 1) {
+      key = i.toString();
+    } else key = String.fromCharCode(i);
+
     giftSlides1.push({ key: key, content: `/src/data/${type}/${key}.${str}` });
   }
 

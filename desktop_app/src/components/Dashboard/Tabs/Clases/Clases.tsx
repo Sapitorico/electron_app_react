@@ -23,7 +23,8 @@ export default function Lessons({
   dominantHand: dominantHandType;
 }) {
   // Variables de estado
-  const [currentStep, setCurrentStep] = useState("1");
+  const [currentStep, setCurrentStep] =
+    buttonclicked.length === 1 ? useState("2") : useState("1");
   const [isCameraOpen, setCameraOpen] = useState(false); // Bandera para el estado de la cámara abierta
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false); // Bandera para intentar abrir la cámara
   const [isCameraAvailable, setIsCameraAvailable] = useState(false); // Bandera para la disponibilidad de la cámara
@@ -119,29 +120,33 @@ export default function Lessons({
 
   // Manejar el siguiente Slide
   const handleNextSlide = () => {
-    let check = false;
-    if (currentkey === "Ñ") {
-      check = true;
-      console.log("hola");
-      setCurrentkey("O");
-    } else {
-      const incrementedCharCode = currentkey.charCodeAt(0) + 1;
-      const incrementedStr = String.fromCharCode(incrementedCharCode);
-      setCurrentkey(incrementedStr);
-    }
-    if (currentkey === "N") {
-      if (check !== true) {
-        setCurrentkey("Ñ");
+    if (buttonclicked !== "1") {
+      let check = false;
+      if (currentkey === "Ñ") {
+        check = true;
+        setCurrentkey("O");
+      } else {
+        const incrementedCharCode = currentkey.charCodeAt(0) + 1;
+        const incrementedStr = String.fromCharCode(incrementedCharCode);
+        setCurrentkey(incrementedStr);
       }
-    }
-    if (currentkey === buttonclicked[1]) {
-      setCurrentkey(buttonclicked[0]);
-      if (currentStep === "1") {
-        setCurrentStep("2");
+      if (currentkey === "N") {
+        if (check !== true) {
+          setCurrentkey("Ñ");
+        }
       }
+      if (currentkey === buttonclicked[1]) {
+        setCurrentkey(buttonclicked[0]);
+        if (currentStep === "1") {
+          setCurrentStep("2");
+        }
+      } else setChange("YES");
     } else {
-      console.log(currentkey);
-      setChange("YES");
+      let incremented = (parseInt(currentkey) + 1).toString();
+      setCurrentkey(incremented);
+      if (currentkey === "10") {
+        setCurrentStep("3");
+      } else setChange("YES");
     }
   };
 
