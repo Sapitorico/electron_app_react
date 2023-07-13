@@ -37,7 +37,6 @@ export default function Lessons({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let intervalId: number;
 
   useEffect(() => {
     checkCameraAvailability();
@@ -80,7 +79,7 @@ export default function Lessons({
     if (video) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      intervalId = setInterval(() => {
+      let intervalId = setInterval(() => {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
         if (context) {
@@ -94,7 +93,7 @@ export default function Lessons({
 
   // Cerrar la webcam y detener la captura de fotogramas
   const closeWebcam = () => {
-    for (let i = 0; i <= 20; i++) {
+    for (let i = 0; i <= 100; i++) {
       clearInterval(i);
     }
     const stream = videoRef.current?.srcObject as MediaStream;
@@ -141,12 +140,18 @@ export default function Lessons({
           setTimeout(() => {
             setCurrentStep("2");
           }, 400);
+        } else if (currentStep === "2") {
+          setChange("YES");
+          setTimeout(() => {
+            setCurrentStep("3");
+          }, 400);
         }
       } else setChange("YES");
     } else {
       let incremented = (parseInt(currentkey) + 1).toString();
       setCurrentkey(incremented);
       if (currentkey === "10") {
+        setCurrentkey(buttonclicked);
         setCurrentStep("3");
       } else setChange("YES");
     }
@@ -156,12 +161,13 @@ export default function Lessons({
   const getMessage = (message: string) => {
     console.log(message);
     if (currentStep === "1" && message === "Next") {
-      console.log(currentkey);
       if (currentStep === "1") {
         handleNextSlide();
       }
-    } else if (currentStep === "2" && message === currentkey) {
-      console.log(currentkey);
+    } else if (
+      (currentStep === "2" || currentStep === "3") &&
+      message === currentkey
+    ) {
       handleNextSlide();
     }
   };
@@ -209,7 +215,6 @@ export default function Lessons({
             changeSlide={changeSlide}
             setChange={setChange}
             currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
           />
         )}
         {currentStep === "2" && (
@@ -219,7 +224,15 @@ export default function Lessons({
             changeSlide={changeSlide}
             setChange={setChange}
             currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
+          />
+        )}
+        {currentStep === "3" && (
+          <Example
+            buttonclicked={buttonclicked}
+            type={"Letter"}
+            changeSlide={changeSlide}
+            setChange={setChange}
+            currentStep={currentStep}
           />
         )}
         <div className="divider divider-horizontal w-px h-full"></div>

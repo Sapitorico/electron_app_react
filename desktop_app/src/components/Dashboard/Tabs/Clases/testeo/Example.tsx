@@ -16,7 +16,6 @@ interface ExampleProps {
   changeSlide: string;
   setChange: (value: string) => void;
   currentStep: string;
-  setCurrentStep: (value: string) => void;
 }
 
 function processGiftSlides({
@@ -27,7 +26,6 @@ function processGiftSlides({
   let fst;
   let sec;
   let key: string;
-  let str: string;
 
   if (buttonclicked.length === 1) {
     fst = 1;
@@ -37,9 +35,7 @@ function processGiftSlides({
     sec = buttonclicked.charCodeAt(1);
   }
 
-  if (type === "image") {
-    str = "jpg";
-  } else str = "gif";
+  let str = type === "image" ? "jpg" : type === "gifts" ? "gif" : "Letter";
 
   for (let i = fst; i <= sec; i++) {
     if (buttonclicked.length === 1) {
@@ -71,14 +67,8 @@ class Example extends Component<ExampleProps, ExampleState> {
   };
   render() {
     const { offsetRadius, showNavigation } = this.state;
-    const {
-      buttonclicked,
-      type,
-      changeSlide,
-      setChange,
-      currentStep,
-      setCurrentStep,
-    } = this.props;
+    const { buttonclicked, type, changeSlide, setChange, currentStep } =
+      this.props;
     const giftSlides1 = processGiftSlides({ buttonclicked, type });
     const slides: Slide[] = [...giftSlides1];
 
@@ -91,7 +81,6 @@ class Example extends Component<ExampleProps, ExampleState> {
           changeSlide={changeSlide}
           setChange={setChange}
           currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
         />
       </div>
     );

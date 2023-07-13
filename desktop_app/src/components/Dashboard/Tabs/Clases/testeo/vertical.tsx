@@ -19,7 +19,6 @@ interface VerticalCarouselProps {
   changeSlide: string;
   setChange: (value: string) => void;
   currentStep: string;
-  setCurrentStep: (value: string) => void;
 }
 
 const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
@@ -29,7 +28,6 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
   changeSlide,
   setChange,
   currentStep,
-  setCurrentStep,
 }) => {
   const [index, setIndex] = useState(0);
 
@@ -130,8 +128,17 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
             <Spring
               key={slide.key}
               to={{
-                width: changeSlide === "YES" ? "0%" : "100%",
-                transform: `translateX(0%) translateY(${translateY}%) scale(${distanceFactor})`,
+                ...(currentStep === "2" || currentStep === "3"
+                  ? {
+                      width: changeSlide === "YES" ? "0%" : "100%",
+                      transform: `translateX(0%) translateY(${translateY}%) scale(${distanceFactor})`,
+                    }
+                  : {
+                      transform: `translateX(${
+                        changeSlide === "YES" ? -200 : 0
+                      }%) translateY(${translateY}%) scale(${distanceFactor})`,
+                    }),
+
                 top: `${
                   offsetRadius === 0
                     ? 50
@@ -149,30 +156,50 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
                     zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2),
                   }}
                 >
-                  <div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black ">
-                    {/* Nombre del slide extraído del contenido */}
-                    {slide.key}
-                  </div>
                   <div
-                    className={
-                      changeSlide === "YES"
-                        ? "w-[100%] bg-green-500 rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px] transition-transform duration-1000 ease-in-out"
-                        : "w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"
-                    }
+                    className={`flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] ${
+                      currentStep === "3" && changeSlide === "YES"
+                        ? "bg-green-500"
+                        : "bg-white"
+                    } w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black ${
+                      offsetFromMiddle === 0 ? "opacity-100" : "opacity-0"
+                    }`}
                   >
-                    {/* Imagen del slide */}
-                    {offsetFromMiddle === 0 ? (
-                      // Reproduce el GIF solo para el elemento principal que sea un GIF
-                      <img
-                        src={slide.content}
-                        className="w-[100%] ml-auto mr-auto"
-                        alt="Gift"
-                      />
-                    ) : (
-                      // Muestra solo la imagen estática para los demás elementos o los elementos principales que no sean un GIF
-                      <img src={""} alt="" />
-                    )}
+                    {/* Nombre del slide extraído del contenido */}
+                    {offsetFromMiddle === 0
+                      ? // Reproduce el GIF solo para el elemento principal que sea un GIF
+                        slide.key
+                      : // Muestra solo la imagen estática para los demás elementos o los elementos principales que no sean un GIF
+                        ""}
                   </div>
+                  {currentStep !== "3" && (
+                    <div
+                      className={
+                        changeSlide === "YES" && currentStep === "2"
+                          ? "w-[100%] bg-green-500 rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px] transition-transform duration-1000 ease-in-out"
+                          : changeSlide === "YES" && currentStep === "1"
+                          ? "w-[100%] bg-blue-500 rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px]"
+                          : `w-[100%] bg-[white] rounded-[8px] pt-[16px] pr-[20px] pb-[16px] pl-[20px] ${
+                              offsetFromMiddle === 0
+                                ? "opacity-100"
+                                : "opacity-0"
+                            }`
+                      }
+                    >
+                      {/* Imagen del slide */}
+                      {offsetFromMiddle === 0 ? (
+                        // Reproduce el GIF solo para el elemento principal que sea un GIF
+                        <img
+                          src={slide.content}
+                          className="w-[100%] ml-auto mr-auto"
+                          alt="Gift"
+                        />
+                      ) : (
+                        // Muestra solo la imagen estática para los demás elementos o los elementos principales que no sean un GIF
+                        <img src={""} alt="" />
+                      )}
+                    </div>
+                  )}
 
                   {/*<div className="flex relative drop-shadow-[2px_2px_10px_rgba(0,0,0,0.8)] rounded-[50%] bg-white w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black">*/}
                   {/*  /!* Nombre del slide extraído del contenido *!/*/}
