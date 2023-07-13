@@ -16,6 +16,7 @@ interface ExampleProps {
   changeSlide: string;
   setChange: (value: string) => void;
   currentStep: string;
+  className?: string;
 }
 
 function processGiftSlides({
@@ -67,13 +68,19 @@ class Example extends Component<ExampleProps, ExampleState> {
   };
   render() {
     const { offsetRadius, showNavigation } = this.state;
-    const { buttonclicked, type, changeSlide, setChange, currentStep } =
-      this.props;
+    const {
+      buttonclicked,
+      type,
+      changeSlide,
+      setChange,
+      currentStep,
+      className,
+    } = this.props;
     const giftSlides1 = processGiftSlides({ buttonclicked, type });
     const slides: Slide[] = [...giftSlides1];
 
     return (
-      <div className="w-[50%] h-[50%]">
+      <div className={`w-[50%] h-[50%] ${className}`}>
         <VerticalCarousel
           slides={slides}
           offsetRadius={offsetRadius}

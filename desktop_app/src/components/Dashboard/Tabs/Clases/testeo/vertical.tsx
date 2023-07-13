@@ -161,7 +161,11 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
                       currentStep === "3" && changeSlide === "YES"
                         ? "bg-green-500"
                         : "bg-white"
-                    } w-[90px] h-[90px] p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center text-[50px] text-black ${
+                    } p-[14px] mr-[-45px] flex-shrink-0 items-center justify-center ${
+                      currentStep === "3"
+                        ? "text-[80px]  w-[150px] h-[150px]"
+                        : "text-[50px]  w-[90px] h-[90px]"
+                    } text-black ${
                       offsetFromMiddle === 0 ? "opacity-100" : "opacity-0"
                     }`}
                   >

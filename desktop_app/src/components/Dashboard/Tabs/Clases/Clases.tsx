@@ -152,7 +152,10 @@ export default function Lessons({
       setCurrentkey(incremented);
       if (currentkey === "10") {
         setCurrentkey(buttonclicked);
-        setCurrentStep("3");
+        setChange("YES");
+        setTimeout(() => {
+          setCurrentStep("3");
+        }, 400);
       } else setChange("YES");
     }
   };
