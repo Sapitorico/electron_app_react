@@ -1,6 +1,6 @@
 import { whatRender } from "@/types/dataTypes";
 import React, { useEffect, useState } from "react";
-import { Spring, animated } from "react-spring";
+import { Spring, animated } from "@react-spring/web";
 
 // Componente de contenedor del slide
 const SlideContainer = animated.div;

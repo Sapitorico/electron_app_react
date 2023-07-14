@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-spring/web": "^9.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "theme-change": "^2.5.0",
+    "tree-kill": "^1.2.2",
     "vite-tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {

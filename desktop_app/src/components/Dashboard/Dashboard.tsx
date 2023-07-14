@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { dominantHandType } from "@/types/dataTypes";
 import { selectedTabType } from "@/types/dataTypes";
 
+import ThemeContainer from "../ThemeContainer";
+
+
 export default function Dashboard({
   selectedTab,
   handleSelectTab,
@@ -184,6 +187,9 @@ export default function Dashboard({
           />
         </ul>
       </div>
+
+       
+
       <div className="flex flex-col p-4 border-primary border-[1.5px] m-4 items-center gap-4 rounded-box">
         <span>Mano dominante</span>
         <div className="btn-group">
@@ -209,6 +215,7 @@ export default function Dashboard({
             Derecha
           </button>
         </div>
+        <ThemeContainer />
       </div>
     </div>
   );

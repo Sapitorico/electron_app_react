@@ -22,7 +22,7 @@ module.exports = {
 
           error: "#F87272",
         },
-      },
+      }, "cupcake"
     ],
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
