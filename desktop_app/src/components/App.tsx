@@ -11,6 +11,7 @@ import { dominantHandType } from "@/types/dataTypes";
 import { fullScreenType } from "@/types/dataTypes";
 import PracticeMenu from "./Dashboard/Tabs/Practice/Practice";
 import { buttype } from "@/types/dataTypes";
+import Modal from "./Dashboard/Tabs/Clases/modal";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
@@ -20,16 +21,21 @@ function App() {
   const [buttonclicked, setbut] = useState<buttype>("AI");
   const [dominantHand, setDominantHand] = useState<dominantHandType>("Right");
   const [fullscreen, setFullScreen] = useState<fullScreenType>("no");
+  const [jutsu, setjutsu] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0)
 
   return (
     <div className="flex w-full h-screen bg-base-100 ">
       {fullscreen === "no" && (
         <div className="flex w-full h-screen bg-base-100 ">
+            
           <Dashboard
             selectedTab={selectedTab}
             handleSelectTab={handleSelectTab}
             dominantHand={dominantHand}
             setDominantHand={setDominantHand}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
           />
 
           <div className="container h-full overflow-hidden mx-auto">
@@ -47,10 +53,20 @@ function App() {
                 <PracticeMenu
                   handleSelectTab={handleSelectTab}
                   setFullScreen={setFullScreen}
+                  setbut={setbut}
+                  setjutsu={setjutsu}
+                
                 />
               )}
               {selectedTab === "glosario" && <Glosario />}
             </div>
+            {selectedTab !== "home" && (
+              <img
+                src="src/data/image/Logo-HandSpeak.png"
+                alt="Logo"
+                className="logo absolute bottom-3 right-3 w-12 animate-spin mx-auto select-none homeImage transition-transform duration-500"
+              />
+            )} 
           </div>
         </div>
       )}
@@ -65,6 +81,7 @@ function App() {
                 setFullScreen={setFullScreen}
                 dominantHand={dominantHand}
                 buttonclicked={buttonclicked}
+                jutsu={jutsu}         
               />
             )}
             {selectedTab === "clasesNumeros" && (
@@ -74,6 +91,7 @@ function App() {
                 setFullScreen={setFullScreen}
                 dominantHand={dominantHand}
                 buttonclicked={buttonclicked}
+                jutsu={jutsu}
               />
             )}
           </div>

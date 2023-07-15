@@ -17,16 +17,29 @@ interface ExampleProps {
   setChange: (value: string) => void;
   currentStep: string;
   className?: string;
+  jutsu?:string
 }
 
 function processGiftSlides({
   buttonclicked,
   type,
-}: Pick<ExampleProps, "buttonclicked" | "type">): Slide[] {
+  jutsu
+}: Pick<ExampleProps, "buttonclicked" | "type" | "jutsu">): Slide[] {
   const giftSlides1: Slide[] = [];
   let fst;
   let sec;
   let key: string;
+   
+
+
+  if (buttonclicked === "JUTSU") {
+    console.log(jutsu)
+    console.log(" if jutsu HOLA")
+    for (let i = 0; i <= 9; i++) {
+      giftSlides1.push({ key: jutsu[i], content: "/src" });
+    }
+    return giftSlides1;
+  }
 
   if (buttonclicked.length === 1) {
     fst = 1;
@@ -75,8 +88,9 @@ class Example extends Component<ExampleProps, ExampleState> {
       setChange,
       currentStep,
       className,
+      jutsu
     } = this.props;
-    const giftSlides1 = processGiftSlides({ buttonclicked, type });
+    const giftSlides1 = processGiftSlides({ buttonclicked, type, jutsu });
     const slides: Slide[] = [...giftSlides1];
 
     return (

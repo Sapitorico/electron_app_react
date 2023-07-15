@@ -14,25 +14,32 @@ export default function Lessons({
   setFullScreen,
   dominantHand,
   buttonclicked,
+  jutsu,
 }: {
   buttonclicked: buttype;
   handleSelectTab: (value: selectedTabType) => void;
   WichEndPoint: number;
   setFullScreen: (value: fullScreenType) => void;
   dominantHand: dominantHandType;
+  jutsu : string
 }) {
   // Variables de estado
   const [currentStep, setCurrentStep] =
-    buttonclicked.length === 1 ? useState("2") : useState("1");
+  buttonclicked === "1"
+    ? useState("2")
+    : buttonclicked === "JUTSU"
+    ? useState("3")
+    : useState("1");
   const [isCameraOpen, setCameraOpen] = useState(false); // Bandera para el estado de la cámara abierta
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false); // Bandera para intentar abrir la cámara
   const [isCameraAvailable, setIsCameraAvailable] = useState(false); // Bandera para la disponibilidad de la cámara
-  const [currentkey, setCurrentkey] = useState(buttonclicked[0]); // Identificador del Key actual
+  const [currentkey, setCurrentkey] =  buttonclicked === "JUTSU" ? useState("0") : useState(buttonclicked[0])  // Identificador del Key actual
   const [changeSlide, setChange] = useState("NO");
+  
 
   // Referencia al elemento de video
   const videoRef = useRef<HTMLVideoElement>(null);
-
+  console.log(jutsu)
   // ID de intervalo para capturar fotogramas del flujo de video
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -118,7 +125,7 @@ export default function Lessons({
 
   // Manejar el siguiente Slide
   const handleNextSlide = () => {
-    if (buttonclicked !== "1") {
+    if (buttonclicked !== "1" && buttonclicked !== "JUTSU") {
       let check = false;
       if (currentkey === "Ñ") {
         check = true;
@@ -145,9 +152,14 @@ export default function Lessons({
           setTimeout(() => {
             setCurrentStep("3");
           }, 400);
+        } else if (currentStep === "4"){
+          setChange("YES");
+          setTimeout(() => {
+            setCurrentStep("3");
+          }, 400);
         }
       } else setChange("YES");
-    } else {
+    } else if (buttonclicked === "1") {
       let incremented = (parseInt(currentkey) + 1).toString();
       setCurrentkey(incremented);
       if (currentkey === "10") {
@@ -157,6 +169,10 @@ export default function Lessons({
           setCurrentStep("3");
         }, 400);
       } else setChange("YES");
+    } else if (buttonclicked === "JUTSU") {
+      let incremented = (parseInt(currentkey) + 1).toString();
+      setCurrentkey(incremented);
+      setChange("YES");
     }
   };
 
@@ -164,9 +180,12 @@ export default function Lessons({
   const getMessage = (message: string) => {
     console.log(message);
     if (currentStep === "1" && message === "Next") {
-      if (currentStep === "1") {
         handleNextSlide();
-      }
+    } else if (
+      buttonclicked === "JUTSU" &&
+      jutsu[parseInt(currentkey)] === message
+    ) {
+      handleNextSlide();
     } else if (
       (currentStep === "2" || currentStep === "3") &&
       message === currentkey
@@ -186,7 +205,7 @@ export default function Lessons({
           className="btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
           onClick={() => {
             closeWebcam();
-            handleSelectTab("home");
+             buttonclicked !== "JUTSU" ? handleSelectTab("educacion") : handleSelectTab("practica")
             setFullScreen("no");
           }}
         >
@@ -211,6 +230,17 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
+        {buttonclicked === "JUTSU" && (
+          <Example
+            buttonclicked={buttonclicked}
+            type={"Letter"}
+            changeSlide={changeSlide}
+            setChange={setChange}
+            currentStep={currentStep}
+            jutsu={jutsu}
+            
+          />
+        )}
         {currentStep === "1" && (
           <Example
             buttonclicked={buttonclicked}
@@ -218,6 +248,7 @@ export default function Lessons({
             changeSlide={changeSlide}
             setChange={setChange}
             currentStep={currentStep}
+            jutsu={jutsu}
           />
         )}
         {currentStep === "2" && (
@@ -227,15 +258,17 @@ export default function Lessons({
             changeSlide={changeSlide}
             setChange={setChange}
             currentStep={currentStep}
+            jutsu={jutsu}
           />
         )}
-        {currentStep === "3" && (
+        {currentStep === "3" && buttonclicked !== "JUTSU" && (
           <Example
             buttonclicked={buttonclicked}
             type={"Letter"}
             changeSlide={changeSlide}
             setChange={setChange}
             currentStep={currentStep}
+            jutsu={jutsu}
           />
         )}
         <div className="divider divider-horizontal w-px h-full"></div>

@@ -10,13 +10,17 @@ export default function Dashboard({
   handleSelectTab,
   dominantHand,
   setDominantHand,
+  activeIndex,
+  setActiveIndex
 }: {
   selectedTab: selectedTabType;
   handleSelectTab: (value: selectedTabType) => void;
   dominantHand: string;
   setDominantHand: (value: dominantHandType) => void;
+  activeIndex: number
+  setActiveIndex: (value: number) => void;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  
   const [animationStyle, setAnimationStyle] = useState({ top: 0 });
 
   useEffect(() => {
@@ -69,7 +73,7 @@ export default function Dashboard({
                   : "text-xl font-semibold"
               }
             >
-              Home
+              Inicio
             </a>
           </li>
           <li
