@@ -7,6 +7,7 @@ import sendImages from "@/components/websocket/socket";
 import { setMessageCallback } from "@/components/websocket/socket";
 import { socket } from "@/components/websocket/socket";
 import Example from "src/components/Dashboard/Tabs/Clases/testeo/Example";
+import Modal from "./modal";
 
 export default function Lessons({
   handleSelectTab,
@@ -39,7 +40,6 @@ export default function Lessons({
 
   // Referencia al elemento de video
   const videoRef = useRef<HTMLVideoElement>(null);
-  console.log(jutsu)
   // ID de intervalo para capturar fotogramas del flujo de video
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -152,28 +152,39 @@ export default function Lessons({
           setTimeout(() => {
             setCurrentStep("3");
           }, 400);
-        } else if (currentStep === "4"){
+        } else if (currentStep === "3"){
           setChange("YES");
           setTimeout(() => {
-            setCurrentStep("3");
+            setCurrentStep("4");
           }, 400);
         }
       } else setChange("YES");
     } else if (buttonclicked === "1") {
       let incremented = (parseInt(currentkey) + 1).toString();
       setCurrentkey(incremented);
-      if (currentkey === "10") {
+      if (currentkey === "10" && currentStep === "2") {
         setCurrentkey(buttonclicked);
         setChange("YES");
         setTimeout(() => {
           setCurrentStep("3");
         }, 400);
+      } else if (currentkey === "10" && currentStep === "3"){
+          setCurrentkey(buttonclicked);
+          setChange("YES");
+          setTimeout(() => {
+            setCurrentStep("4");
+          }, 400);
       } else setChange("YES");
     } else if (buttonclicked === "JUTSU") {
-      let incremented = (parseInt(currentkey) + 1).toString();
-      setCurrentkey(incremented);
-      setChange("YES");
-    }
+        let incremented = (parseInt(currentkey) + 1).toString();
+        setCurrentkey(incremented);
+        if (currentkey === "0"){
+          setChange("YES");
+          setTimeout(() => {
+            setCurrentStep("4");
+          }, 400);
+        } else setChange("YES");
+      }
   };
 
   // Función de devolución de llamada para manejar mensajes entrantes desde el socket
@@ -198,6 +209,10 @@ export default function Lessons({
     setMessageCallback(getMessage);
   }, [currentkey, currentStep]);
 
+  function handleclick(){
+    closeWebcam()
+    window.my_modal_4.showModal()
+  } 
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
       <div className="flex items-center w-20">
@@ -230,7 +245,7 @@ export default function Lessons({
       <div className="flex flex-grow justify-center items-center">
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
-        {buttonclicked === "JUTSU" && (
+        {buttonclicked === "JUTSU" && currentStep === "3" && (
           <Example
             buttonclicked={buttonclicked}
             type={"Letter"}
@@ -270,6 +285,12 @@ export default function Lessons({
             currentStep={currentStep}
             jutsu={jutsu}
           />
+        )}
+        {currentStep === "4" && (
+          <>
+           <button className="btn hidden" onClick={()=>handleclick()}>open modal</button>
+           <Modal handleSelectTab={handleSelectTab} setFullScreen={setFullScreen} retur={buttonclicked === "JUTSU" ? "0" : "1"}/>
+          </>
         )}
         <div className="divider divider-horizontal w-px h-full"></div>
         <div className="flex flex-col items-center mx-auto">

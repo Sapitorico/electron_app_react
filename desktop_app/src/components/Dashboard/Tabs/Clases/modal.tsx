@@ -1,14 +1,19 @@
+import { selectedTabType } from "@/types/dataTypes";
+import { fullScreenType } from "@/types/dataTypes";
 
 
-export default function Modal({
-   
-}){ 
-  function handleclick(){
-    window.my_modal_4.showModal()
-  }
+export default function Modal({ 
+  setFullScreen, 
+  handleSelectTab,
+  retur}:{
+
+  handleSelectTab: (value: selectedTabType) => void;
+  setFullScreen: (value: fullScreenType) => void;
+  retur:string
+    
+  }){ 
   return (
    <div>
-  <button className="btn" onClick={()=>handleclick()}>open modal</button>
   <dialog id="my_modal_4" className="modal">
     <form method="dialog" className="modal-box w-1/4 max-w-5xl">
       <h3 className="font-bold text-lg">¡Buen Trabajo!</h3>
@@ -31,7 +36,7 @@ export default function Modal({
           />
           </svg>
         </button>
-        <button className="btn btn-primary">Continuar</button>
+        <button className="btn btn-primary" onClick={() => {retur === "1" ? handleSelectTab("educacion") : handleSelectTab("practica"), setFullScreen("no")}}>Continuar</button>
       </div>
     </form>
   </dialog>

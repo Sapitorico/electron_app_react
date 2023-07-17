@@ -41,7 +41,7 @@ export default function Dashboard({
   return (
     <div className="flex flex-col justify-between basis-1/8 h-full bg-base-200">
       <div>
-        <ul className="tabs tabs-boxed flex-col items-stretch drop-shadow-lg">
+        <ul className="tabs flex-col items-stretch drop-shadow-lg">
           <li
             onClick={() => handleSelectTabWithAnimation("home", 0)}
             className={`stat ${

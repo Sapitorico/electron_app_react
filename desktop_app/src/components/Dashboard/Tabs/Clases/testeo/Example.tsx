@@ -33,8 +33,6 @@ function processGiftSlides({
 
 
   if (buttonclicked === "JUTSU") {
-    console.log(jutsu)
-    console.log(" if jutsu HOLA")
     for (let i = 0; i <= 9; i++) {
       giftSlides1.push({ key: jutsu[i], content: "/src" });
     }
