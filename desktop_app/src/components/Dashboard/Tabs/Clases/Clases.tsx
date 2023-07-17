@@ -22,21 +22,21 @@ export default function Lessons({
   WichEndPoint: number;
   setFullScreen: (value: fullScreenType) => void;
   dominantHand: dominantHandType;
-  jutsu : string
+  jutsu: string;
 }) {
   // Variables de estado
   const [currentStep, setCurrentStep] =
-  buttonclicked === "1"
-    ? useState("2")
-    : buttonclicked === "JUTSU"
-    ? useState("3")
-    : useState("1");
+    buttonclicked === "1"
+      ? useState("2")
+      : buttonclicked === "JUTSU"
+      ? useState("3")
+      : useState("1");
   const [isCameraOpen, setCameraOpen] = useState(false); // Bandera para el estado de la cámara abierta
   const [isTryingToOpenCamera, setIsTryingToOpenCamera] = useState(false); // Bandera para intentar abrir la cámara
   const [isCameraAvailable, setIsCameraAvailable] = useState(false); // Bandera para la disponibilidad de la cámara
-  const [currentkey, setCurrentkey] =  buttonclicked === "JUTSU" ? useState("0") : useState(buttonclicked[0])  // Identificador del Key actual
+  const [currentkey, setCurrentkey] =
+    buttonclicked === "JUTSU" ? useState("0") : useState(buttonclicked[0]); // Identificador del Key actual
   const [changeSlide, setChange] = useState("NO");
-  
 
   // Referencia al elemento de video
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -152,10 +152,13 @@ export default function Lessons({
           setTimeout(() => {
             setCurrentStep("3");
           }, 400);
-        } else if (currentStep === "3"){
+        } else if (currentStep === "3") {
           setChange("YES");
           setTimeout(() => {
             setCurrentStep("4");
+            setTimeout(() => {
+              handleclick();
+            }, 250);
           }, 400);
         }
       } else setChange("YES");
@@ -168,30 +171,36 @@ export default function Lessons({
         setTimeout(() => {
           setCurrentStep("3");
         }, 400);
-      } else if (currentkey === "10" && currentStep === "3"){
-          setCurrentkey(buttonclicked);
-          setChange("YES");
+      } else if (currentkey === "10" && currentStep === "3") {
+        setCurrentkey(buttonclicked);
+        setChange("YES");
+        setTimeout(() => {
+          setCurrentStep("4");
           setTimeout(() => {
-            setCurrentStep("4");
-          }, 400);
+            handleclick();
+          }, 250);
+        }, 400);
       } else setChange("YES");
     } else if (buttonclicked === "JUTSU") {
-        let incremented = (parseInt(currentkey) + 1).toString();
-        setCurrentkey(incremented);
-        if (currentkey === "0"){
-          setChange("YES");
+      let incremented = (parseInt(currentkey) + 1).toString();
+      setCurrentkey(incremented);
+      if (currentkey === "9") {
+        setChange("YES");
+        setTimeout(() => {
+          setCurrentStep("4");
           setTimeout(() => {
-            setCurrentStep("4");
-          }, 400);
-        } else setChange("YES");
-      }
+            handleclick();
+          }, 250);
+        }, 400);
+      } else setChange("YES");
+    }
   };
 
   // Función de devolución de llamada para manejar mensajes entrantes desde el socket
   const getMessage = (message: string) => {
     console.log(message);
     if (currentStep === "1" && message === "Next") {
-        handleNextSlide();
+      handleNextSlide();
     } else if (
       buttonclicked === "JUTSU" &&
       jutsu[parseInt(currentkey)] === message
@@ -209,10 +218,10 @@ export default function Lessons({
     setMessageCallback(getMessage);
   }, [currentkey, currentStep]);
 
-  function handleclick(){
-    closeWebcam()
-    window.my_modal_4.showModal()
-  } 
+  function handleclick() {
+    closeWebcam();
+    window.my_modal_4.showModal();
+  }
   return (
     <div className="mainContainer flex flex-col h-screen mx-auto">
       <div className="flex items-center w-20">
@@ -220,7 +229,9 @@ export default function Lessons({
           className="btn-primary w-44 h-10 rounded-md mt-3 flex items-center"
           onClick={() => {
             closeWebcam();
-             buttonclicked !== "JUTSU" ? handleSelectTab("educacion") : handleSelectTab("practica")
+            buttonclicked !== "JUTSU"
+              ? handleSelectTab("educacion")
+              : handleSelectTab("practica");
             setFullScreen("no");
           }}
         >
@@ -253,7 +264,6 @@ export default function Lessons({
             setChange={setChange}
             currentStep={currentStep}
             jutsu={jutsu}
-            
           />
         )}
         {currentStep === "1" && (
@@ -288,8 +298,14 @@ export default function Lessons({
         )}
         {currentStep === "4" && (
           <>
-           <button className="btn hidden" onClick={()=>handleclick()}>open modal</button>
-           <Modal handleSelectTab={handleSelectTab} setFullScreen={setFullScreen} retur={buttonclicked === "JUTSU" ? "0" : "1"}/>
+            <button className="btn hidden" onClick={() => handleclick()}>
+              open modal
+            </button>
+            <Modal
+              handleSelectTab={handleSelectTab}
+              setFullScreen={setFullScreen}
+              retur={buttonclicked === "JUTSU" ? "0" : "1"}
+            />
           </>
         )}
         <div className="divider divider-horizontal w-px h-full"></div>
