@@ -21,7 +21,7 @@ def processLetter(image, hand_type, currentmode):
                 if check == 'Next':
                     return(check)
             if currentmode != "Const":    
-                check = control.change_mode(image, result, currentmode)
+                check = control.change_mode(image, result, currentmode, hand_type)
                 if check != currentmode:
                     return(check)
             positions = Base.detect_hand_type(hand_type, result, copy_image)
@@ -49,7 +49,7 @@ def processNumber(image, currentmode, hand_type):
                 if check == 'Next':
                     return(check)
             if currentmode != "Const":    
-                check = control.change_mode(image, result, currentmode)
+                check = control.change_mode(image, result, currentmode, hand_type)
                 if check != currentmode:
                     return(check)
             number = control.count_fingers(copy_image, result)

@@ -31,7 +31,7 @@ async def websocket_endpoint(websocket: WebSocket):
             result = processLetter(image, data[1], currentmode)
 
         elif currentmode == "Number":
-            result = processNumber(image, currentmode)
+            result = processNumber(image, currentmode, data[1])
 
         elif currentmode == "Word":
             result = processLetter(image, data[1], currentmode)
@@ -43,6 +43,10 @@ async def websocket_endpoint(websocket: WebSocket):
         elif np.any(result == np.array(["Number", "Word", "Letter"])):
             currentmode = result
             await websocket.send_text("Changeing mode")
+        elif np.any(result == np.array([" ", "Borrar"])):
+            if checker != result:
+                checker = result
+                await websocket.send_text(result)
         else:
             if currentmode == "Letter":
                 result = Lmodel.predict(result)

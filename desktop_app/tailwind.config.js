@@ -21,8 +21,12 @@ module.exports = {
           warning: "#F87272",
 
           error: "#F87272",
-        },
-      }, "cupcake"
+        }, cupcake: {
+          ...require("daisyui/src/theming/themes")["[data-theme=cupcake]"],
+          primary : "#1de9b6",
+          
+      },
+      }
     ],
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],

@@ -10,13 +10,13 @@ export default function PracticeMenu({
 }: {
   handleSelectTab: (value: selectedTabType) => void;
   setFullScreen: (value: fullScreenType) => void;
-  setbut: (value:buttype ) => void;
-  setjutsu: (value:string ) => void;
+  setbut: (value: buttype) => void;
+  setjutsu: (value: string) => void;
 }) {
   function generateRandomArray(length: number) {
     const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
     const randomArray = new Set<string>();
-  
+
     while (randomArray.size < length) {
       const randomIndex = Math.floor(Math.random() * letters.length);
       const letter = letters[randomIndex];
@@ -27,8 +27,8 @@ export default function PracticeMenu({
 
   function handleclick() {
     let random = generateRandomArray(10).join("");
-    setbut("JUTSU")
-    setjutsu(random)
+    setbut("JUTSU");
+    setjutsu(random);
   }
   return (
     <div className="flex-col space-y-10 my-28">
@@ -36,7 +36,8 @@ export default function PracticeMenu({
         <div className="card-body">
           <h2 className="card-title justify-center">Práctica</h2>
           <p>
-          ¡Demuestra tu destreza y conocimiento adquirido, explora diferentes modos para fortalecer tu comunicación y expresión.
+            ¡Demuestra tu destreza y conocimiento adquirido, explora diferentes
+            modos para fortalecer tu comunicación y expresión.
           </p>
         </div>
       </div>
@@ -44,15 +45,17 @@ export default function PracticeMenu({
         <div className="card w-96 bg-base-200 shadow-2xl shadow-black ">
           <div className="card-body">
             <h2 className="card-title">Modo Aleatorio</h2>
-            <p>Pon a prueba tus habilidades interpretando señas de forma aleatoria.</p>
+            <p>
+              Pon a prueba tus habilidades interpretando señas de forma
+              aleatoria.
+            </p>
             <div className="card-actions justify-end">
               <button
                 className="btn btn-primary"
                 onClick={() => {
-                  handleclick()
+                  handleclick();
                   setFullScreen("yes");
                   handleSelectTab("clasesLetras");
-                  handleclick()
                 }}
               >
                 Jugar
@@ -65,7 +68,15 @@ export default function PracticeMenu({
             <h2 className="card-title">Modo Texto</h2>
             <p>Escribe tu propia historia no lineal con señas</p>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">Escribe</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setFullScreen("yes");
+                  handleSelectTab("write");
+                }}
+              >
+                Escribe
+              </button>
             </div>
           </div>
         </div>

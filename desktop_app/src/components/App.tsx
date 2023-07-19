@@ -2,7 +2,6 @@ import Dashboard from "./Dashboard/Dashboard";
 import { selectedTabType } from "@/types/dataTypes";
 import HomePage from "./Dashboard/Tabs/Home/HomePage";
 import Education from "./Dashboard/Tabs/Education/Education";
-import Practice from "./Dashboard/Tabs/Practice/Practice";
 import { useState } from "react";
 import Glosario from "./Dashboard/Tabs/Glosario/Glosario";
 import Clases from "./Dashboard/Tabs/Clases/Clases";
@@ -11,7 +10,7 @@ import { dominantHandType } from "@/types/dataTypes";
 import { fullScreenType } from "@/types/dataTypes";
 import PracticeMenu from "./Dashboard/Tabs/Practice/Practice";
 import { buttype } from "@/types/dataTypes";
-import Modal from "./Dashboard/Tabs/Clases/modal";
+import Write from "./Dashboard/Tabs/Practice/write";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<selectedTabType>("home");
@@ -22,13 +21,12 @@ function App() {
   const [dominantHand, setDominantHand] = useState<dominantHandType>("Right");
   const [fullscreen, setFullScreen] = useState<fullScreenType>("no");
   const [jutsu, setjutsu] = useState("");
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <div className="flex w-full h-screen bg-base-100 ">
       {fullscreen === "no" && (
         <div className="flex w-full h-screen bg-base-100 ">
-            
           <Dashboard
             selectedTab={selectedTab}
             handleSelectTab={handleSelectTab}
@@ -55,7 +53,6 @@ function App() {
                   setFullScreen={setFullScreen}
                   setbut={setbut}
                   setjutsu={setjutsu}
-                
                 />
               )}
               {selectedTab === "glosario" && <Glosario />}
@@ -66,7 +63,7 @@ function App() {
                 alt="Logo"
                 className="logo absolute bottom-3 right-3 w-12 animate-spin mx-auto select-none homeImage transition-transform duration-500"
               />
-            )} 
+            )}
           </div>
         </div>
       )}
@@ -81,7 +78,7 @@ function App() {
                 setFullScreen={setFullScreen}
                 dominantHand={dominantHand}
                 buttonclicked={buttonclicked}
-                jutsu={jutsu}         
+                jutsu={jutsu}
               />
             )}
             {selectedTab === "clasesNumeros" && (
@@ -92,6 +89,14 @@ function App() {
                 dominantHand={dominantHand}
                 buttonclicked={buttonclicked}
                 jutsu={jutsu}
+              />
+            )}
+            {selectedTab === "write" && (
+              <Write
+                handleSelectTab={handleSelectTab}
+                WichEndPoint={2}
+                setFullScreen={setFullScreen}
+                dominantHand={dominantHand}
               />
             )}
           </div>
