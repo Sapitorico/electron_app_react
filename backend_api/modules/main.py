@@ -9,7 +9,7 @@ from model_loader import ModelLoader
 
 
 Lmodel = ModelLoader(0.8)
-Wmodel = ModelLoader(0.8, "../models/Words.onnx")
+Wmodel = ModelLoader(0.8, "../models/words2.onnx")
 
 app = FastAPI()
 
@@ -43,7 +43,7 @@ async def websocket_endpoint(websocket: WebSocket):
         elif np.any(result == np.array(["Number", "Word", "Letter"])):
             currentmode = result
             await websocket.send_text("Changeing mode")
-        elif np.any(result == np.array([" ", "Borrar"])):
+        elif np.any(result == " ") or np.any(result == "Borrar"):
             if checker != result:
                 checker = result
                 await websocket.send_text(result)

@@ -176,36 +176,3 @@ class HandControl:
                 if fingers in [[0, 1, 0, 0, 0], [0, 1, 1, 0, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 1], [1, 1, 1, 1, 1]]:
                     fingers_count += fingers.count(1)
         return fingers_count
-
-
-if __name__ == "__main__":
-    import cv2
-    from image_processing import HandDetectionUtils
-
-    """
-    test in real time
-    """
-    capture = cv2.VideoCapture(0)
-    Base = HandDetectionUtils(224)
-    Hands = Base.hands
-    control = HandControl()
-    with Hands:
-        while capture.isOpened():
-            key = cv2.waitKey(1)
-            success, image = capture.read()
-            if not success:
-                continue
-            image = cv2.flip(image, 1)
-            result = Base.detect_hands(image)
-            if result.multi_hand_landmarks:
-                xd =""
-                xd = control.change_mode(image, result, "Letter", "Right")  
-                print(xd)
-                
-                fingers = control.count_fingers(image, result)
-                print(fingers)
-            if key == 27:
-                break
-            cv2.imshow("image capture", image)
-    capture.release()
-    cv2.destroyAllWindows()
