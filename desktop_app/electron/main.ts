@@ -29,11 +29,12 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 500,
      // nodeIntegration: true,
-    icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
+    // icon: path.join(process.env.PUBLIC, 'icon.svg'),
+    icon: 'public/icon.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
-    // autoHideMenuBar: true,
+    autoHideMenuBar: true,
     // fullscreen: true
   })
 
@@ -42,7 +43,7 @@ function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
 
-  if (VITE_DEV_SERVER_URL) {
+        if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
     // win.loadFile('dist/index.html')
